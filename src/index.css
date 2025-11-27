@@ -1,0 +1,77 @@
+/* src/index.css */
+/* Purpose: Your custom utilities, surgical dress background, glassmorphism, gradient text, scrollbar, etc. */
+/* Edit colors, blur levels, and shadows here; JSX stays clean and reusable. */
+
+/* 1) Surgical dress gradient background (subtle, airy, medical with deeper teal contrast) */
+:root {
+  --surgical-1: #b3fff0; /* base mint */
+  --surgical-2: #eafffb; /* very light mint */
+  --surgical-3: #a7f3d0; /* mint-teal accent */
+  --surgical-4: #0f766e; /* deeper teal for contrast */
+}
+
+/* Apply to body to match your HTML baseline */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  /* Diagonal gradient with deeper teal for premium polish */
+  background: linear-gradient(
+    135deg,
+    var(--surgical-1) 0%,
+    var(--surgical-2) 30%,
+    var(--surgical-3) 70%,
+    var(--surgical-4) 100%
+  );
+  color: rgb(30 41 59); /* slate-800 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 2) Glassmorphism utilities */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-8px);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: rgba(13, 148, 136, 0.4);
+}
+
+/* 3) Gradient text */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(to right, #0f766e, #0d9488);
+}
+
+/* 4) Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #0f766e; }
