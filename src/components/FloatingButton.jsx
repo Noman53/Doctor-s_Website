@@ -33,13 +33,13 @@ const FloatingButton = () => {
         aria-hidden={!open}
       >
         <a
-          href="tel:+880XXXXXXXXXX"
+          href="tel:+8801711946412"
           className="bg-teal-600 text-white p-3 rounded-full shadow-md hover:bg-teal-700 transition transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer"
         >
           <Phone className="h-5 w-5" />
         </a>
         <a
-          href="https://wa.me/880XXXXXXXXXX"
+          href="https://wa.me/8801711946412"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-green-500 text-white p-3 rounded-full shadow-md hover:bg-green-600 transition transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"

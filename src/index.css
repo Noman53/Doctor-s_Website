@@ -1,35 +1,65 @@
 /* src/index.css */
-/* Purpose: Your custom utilities, surgical dress background, glassmorphism, gradient text, scrollbar, etc. */
-/* Edit colors, blur levels, and shadows here; JSX stays clean and reusable. */
+/* Purpose: Global surgical gradient + utilities for section separation */
 
-/* 1) Surgical dress gradient background (subtle, airy, medical with deeper teal contrast) */
+/* 1) Surgical dress gradient background (with deeper teal contrast) */
 :root {
-  --surgical-1: #b3fff0; /* base mint */
-  --surgical-2: #eafffb; /* very light mint */
-  --surgical-3: #a7f3d0; /* mint-teal accent */
-  --surgical-4: #0f766e; /* deeper teal for contrast */
-}
+  --surgical-1: #bffcf0;
+  --surgical-2: #e6fff8;
+  --surgical-3: #c5f7ef;
+  --surgical-4: #0f766e;
 
-/* Apply to body to match your HTML baseline */
-html, body, #root {
-  height: 100%;
-}
-
-body {
-  /* Diagonal gradient with deeper teal for premium polish */
-  background: linear-gradient(
+  /* canonical, shared gradient used everywhere */
+  --site-grad: linear-gradient(
     135deg,
     var(--surgical-1) 0%,
-    var(--surgical-2) 30%,
-    var(--surgical-3) 70%,
+    var(--surgical-2) 38%,
+    var(--surgical-3) 72%,
     var(--surgical-4) 100%
   );
-  color: rgb(30 41 59); /* slate-800 */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
+  /* lighter overlay for panels */
+  --overlay-light: rgba(255,255,255,0.12);
 }
 
-/* 2) Glassmorphism utilities */
+/* use one canonical site background (use on hero / sections / footer wrapper) */
+.site-bg {
+  background-image: var(--site-grad);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* refined overlay helper for panels */
+.section-overlay-light {
+  background: var(--overlay-light);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+/* 2) Section separation utilities (tighter mobile-first spacing) */
+.section {
+  padding: clamp(2rem, 3.5vw, 5rem) 0;
+  scroll-margin-top: 5rem;
+}
+.section + .section {
+  padding-top: clamp(1rem, 2.5vw, 3rem);
+}
+
+/* slightly tighter vertical rhythm when sections stack */
+.section + .section {
+  padding-top: clamp(1rem, 2.5vw, 3rem);
+}
+
+/* subtle top border that'll match the copyright separator */
+.section-top-border {
+  height: 1px;
+  background: linear-gradient(to right, rgba(15,118,110,0.22), rgba(167,243,208,0.12), rgba(199,125,255,0.12));
+  border-radius: 9999px;
+  opacity: 0.9;
+}
+
+/* 3) Glassmorphism utilities */
 .glass-nav {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(25px) saturate(180%);
@@ -62,7 +92,7 @@ body {
   border-color: rgba(13, 148, 136, 0.4);
 }
 
-/* 3) Gradient text */
+/* 4) Gradient text */
 .text-gradient {
   background-clip: text;
   -webkit-background-clip: text;
@@ -70,7 +100,7 @@ body {
   background-image: linear-gradient(to right, #0f766e, #0d9488);
 }
 
-/* 4) Scrollbar */
+/* 5) Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 4px; }
