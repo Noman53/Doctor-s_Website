@@ -15,7 +15,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
   // 🔧 Customize off-days (0 = Sunday, 6 = Saturday)
   const offDays = [5] // Friday
 
-  // 🔧 Customize chamber time slots
+  // 🔧 Time slots
   const timeSlots = ['06:00 PM','06:30 PM','07:00 PM','07:30 PM','08:00 PM','08:30 PM']
 
   const now = new Date()
@@ -24,7 +24,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
 
   const labelForStep = ['Date', 'Time', 'Details']
 
-  // send booking email with EmailJS (client-side)
+  // EmailJS
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (isSubmitting) return
@@ -49,11 +49,9 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
         templateParams,
         process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
       )
-      // success -> show final confirmation step
       setStep(4)
     } catch (err) {
       console.error('EmailJS error', err)
-      // keep UX simple — notify user to retry / call
       alert('There was an issue sending confirmation email. Please try again or call +880 1711-946412.')
     } finally {
       setIsSubmitting(false)
@@ -65,6 +63,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
       <div className="absolute inset-0 section-overlay-light pointer-events-none z-0" />
       <div id="booking" className="section py-10 md:py-16 relative z-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          
           {/* Header */}
           <div className="text-center mb-12">
             <span className="text-teal-700 font-bold uppercase tracking-wider text-xs bg-white/50 px-3 py-1 rounded-full">
@@ -74,9 +73,9 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
             <p className="text-slate-600 mt-4">Simple 3-step process. Our team will contact you to confirm.</p>
           </div>
 
-          {/* Card */}
           <div className="glass-panel rounded-4xl shadow-2xl border border-white/60 overflow-hidden">
-            {/* Stepper Header */}
+
+            {/* Stepper */}
             <div className="bg-white/40 px-8 py-6 border-b border-white/30 backdrop-blur-sm flex justify-center gap-8">
               {labelForStep.map((label, idx) => {
                 const n = idx + 1
@@ -97,16 +96,17 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
 
             {/* Body */}
             <div className="p-8 sm:p-12 min-h-[420px]">
-              {/* Step 1: Date */}
+
+              {/* STEP 1 — DATE */}
               {step === 1 && (
                 <>
                   <div className="flex items-center justify-between mb-6">
                     <button
                       onClick={() => setMonthOffset((m) => Math.max(0, m - 1))}
                       disabled={monthOffset === 0}
-                      className={`px-4 py-2 rounded-lg font-bold transition ${monthOffset === 0 ? 'bg-slate-200 text-slate-500 cursor-not-allowed' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'}`}
-                      style={{ cursor: monthOffset === 0 ? 'not-allowed' : 'pointer' }}
-                      aria-label="Previous month"
+                      className={`px-4 py-2 rounded-lg font-bold transition ${
+                        monthOffset === 0 ? 'bg-slate-200 text-slate-500 cursor-not-allowed' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
+                      }`}
                     >
                       ← Prev Month
                     </button>
@@ -118,8 +118,6 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     <button
                       onClick={() => setMonthOffset((m) => m + 1)}
                       className="px-4 py-2 rounded-lg bg-teal-600 text-white font-bold hover:bg-teal-700 transition"
-                      style={{ cursor: 'pointer' }}
-                      aria-label="Next month"
                     >
                       Next Month →
                     </button>
@@ -127,21 +125,29 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
 
                   {/* Week labels */}
                   <div className="grid grid-cols-7 gap-2 text-center mb-2">
-                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d) => (
+                    {['S','M','T','W','T','F','S'].map((d) => (
                       <div key={d} className="text-xs font-bold text-slate-500 uppercase">{d}</div>
                     ))}
                   </div>
 
-                  {/* Calendar wrapper — slim gradient border + frosted panel so calendar reads as a single card */}
+                  {/* Calendar */}
                   <div className="mx-auto w-full max-w-xl p-1 rounded-3xl bg-gradient-to-br from-teal-200/35 via-teal-100/25 to-white/20 shadow-sm">
                     <div className="rounded-2xl bg-white/40 backdrop-blur-md p-3 md:p-4 border border-white/30">
-                      {/* Calendar grid — perspective + 3D-friendly transform for card-like dates */}
-                      <div className="grid grid-cols-7 gap-3 text-center transform-gpu perspective-1000 will-change-transform">
+
+                      <div className="grid grid-cols-7 gap-3 text-center">
+
                         {Array.from({ length: daysInMonth }).map((_, i) => {
                           const day = i + 1
                           const dateObj = new Date(displayDate.getFullYear(), displayDate.getMonth(), day)
                           const weekday = dateObj.getDay()
-                          const disabled = offDays.includes(weekday)
+
+                          // PAST DATE LOGIC — NO COLOR CHANGE, ONLY DISABLE
+                          const today = new Date()
+                          today.setHours(0,0,0,0)
+                          const isPast = dateObj < today
+
+                          const disabled = offDays.includes(weekday) || isPast
+
                           const token = `${displayDate.getFullYear()}-${displayDate.getMonth()}-${day}`
                           const isActive = selectedDate === token
 
@@ -149,21 +155,37 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                             <button
                               key={token}
                               disabled={disabled}
-                              onClick={() => setSelectedDate(token)}
-                              title={disabled ? 'Chamber closed' : `Select ${day}`}
-                              className={`px-5 py-3 text-sm transition-transform duration-300 font-semibold border-2 rounded-lg ${
-                                disabled
-                                  ? 'bg-red-50 text-red-700 border-red-200 shadow-none cursor-not-allowed opacity-60'
+                              onClick={() => !disabled && setSelectedDate(token)}
+                              title={
+                                offDays.includes(weekday) ? 'Chamber closed' :
+                                isPast ? 'Past date' :
+                                `Select ${day}`
+                              }
+                              className={`px-5 py-3 text-sm transition-transform duration-300 font-semibold border-2 rounded-lg
+                                ${
+                                  // Off-day (red)
+                                  offDays.includes(weekday)
+                                    ? 'bg-red-50 text-red-700 border-red-200 cursor-not-allowed opacity-60'
+
+                                  // Past date — LOOK NORMAL but disabled
+                                  : isPast
+                                    ? 'bg-white/70 text-slate-800 border border-white/40 cursor-not-allowed'
+                                
+                                  // Selected
                                   : isActive
-                                  ? 'bg-teal-600 text-white font-bold shadow-2xl transform -translate-y-1 scale-105'
-                                  : 'bg-white/70 text-slate-800 border border-white/40 shadow-sm transform translate-y-0 hover:-translate-y-3 hover:scale-105 hover:shadow-2xl'
-                              }`}
-                             style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
-                           >
+                                    ? 'bg-teal-600 text-white font-bold shadow-2xl transform -translate-y-1 scale-105'
+
+                                  // Normal available date
+                                  : 'bg-white/70 text-slate-800 border border-white/40 shadow-sm hover:-translate-y-3 hover:scale-105 hover:shadow-2xl'
+                                }
+                              `}
+                              style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
+                            >
                               {day}
                             </button>
                           )
                         })}
+
                       </div>
                     </div>
                   </div>
@@ -172,12 +194,11 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     <button
                       onClick={() => setStep(2)}
                       disabled={!selectedDate}
-                      className={`px-8 py-4 rounded-full font-bold transition flex items-center ${
+                      className={`px-8 py-4 rounded-full font-bold flex items-center transition ${
                         selectedDate
                           ? 'bg-teal-600 text-white hover:bg-teal-700 shadow-lg'
                           : 'bg-slate-300 text-slate-600 cursor-not-allowed'
                       }`}
-                      style={{ cursor: selectedDate ? 'pointer' : 'not-allowed' }}
                     >
                       Next Step <ArrowRight className="ml-2 h-4 w-4" />
                     </button>
@@ -185,10 +206,11 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                 </>
               )}
 
-              {/* Step 2: Time */}
+              {/* STEP 2 — TIME */}
               {step === 2 && (
                 <>
                   <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">Select Time Slot</h3>
+
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {timeSlots.map((t) => (
                       <button
@@ -199,7 +221,6 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                             ? 'bg-teal-600 text-white shadow-lg'
                             : 'bg-white text-slate-800 hover:bg-teal-50 hover:text-teal-600'
                         }`}
-                        style={{ cursor: 'pointer' }}
                       >
                         <Moon className="h-4 w-4 mr-2" /> {t}
                       </button>
@@ -210,19 +231,18 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     <button
                       onClick={() => setStep(1)}
                       className="text-slate-500 hover:text-slate-800 font-bold px-6 py-3 rounded-full hover:bg-white/50 transition"
-                      style={{ cursor: 'pointer' }}
                     >
                       Back
                     </button>
+
                     <button
                       onClick={() => setStep(3)}
                       disabled={!selectedTime}
-                      className={`px-8 py-4 rounded-full font-bold transition flex items-center ${
+                      className={`px-8 py-4 rounded-full font-bold flex items-center transition ${
                         selectedTime
                           ? 'bg-teal-600 text-white hover:bg-teal-700 shadow-lg'
                           : 'bg-slate-300 text-slate-600 cursor-not-allowed'
                       }`}
-                      style={{ cursor: selectedTime ? 'pointer' : 'not-allowed' }}
                     >
                       Next Step <ArrowRight className="ml-2 h-4 w-4" />
                     </button>
@@ -230,7 +250,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                 </>
               )}
 
-              {/* Step 3: Details */}
+              {/* STEP 3 — DETAILS */}
               {step === 3 && (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">Patient Details</h3>
@@ -268,15 +288,16 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       type="button"
                       onClick={() => setStep(2)}
                       className="text-slate-500 hover:text-slate-800 font-bold px-6 py-3 rounded-full hover:bg-white/50 transition"
-                      style={{ cursor: 'pointer' }}
                     >
                       Back
                     </button>
+
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`bg-teal-600 text-white px-12 py-4 rounded-full hover:bg-teal-700 transition font-bold shadow-xl hover:shadow-teal-600/40 ${isSubmitting ? 'opacity-70 cursor-wait' : ''}`}
-                      style={{ cursor: isSubmitting ? 'wait' : 'pointer' }}
+                      className={`bg-teal-600 text-white px-12 py-4 rounded-full hover:bg-teal-700 transition font-bold shadow-xl hover:shadow-teal-600/40 ${
+                        isSubmitting ? 'opacity-70 cursor-wait' : ''
+                      }`}
                     >
                       {isSubmitting ? 'Sending...' : 'Confirm Booking'}
                     </button>
@@ -284,19 +305,20 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                 </form>
               )}
 
-              {/* Step 4: Success */}
+              {/* STEP 4 — SUCCESS */}
               {step === 4 && (
                 <div className="text-center py-12">
                   <div className="h-24 w-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
                     <Check className="h-12 w-12 text-green-600" />
                   </div>
                   <h3 className="text-3xl font-extrabold text-slate-900 mb-4">Booking Confirmed!</h3>
+
                   <p className="text-slate-600 text-lg max-w-md mx-auto mb-10 leading-relaxed">
-                    {/* customizable thank you message (prop) */}
                     {thankYouMessage}{' '}
                     <span className="font-bold text-slate-800">+880 1711-946412</span>
                     {' '}for final confirmation.
                   </p>
+
                   <a
                     href="#home"
                     onClick={() => {
@@ -307,12 +329,12 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       setMonthOffset(0)
                     }}
                     className="inline-flex items-center text-teal-700 font-bold hover:text-teal-900 hover:underline transition"
-                    style={{ cursor: 'pointer' }}
                   >
                     <Home className="h-5 w-5 mr-2" /> Return to Home
                   </a>
                 </div>
               )}
+
             </div>
           </div>
         </div>
