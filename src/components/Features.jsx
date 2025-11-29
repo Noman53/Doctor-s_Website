@@ -6,7 +6,7 @@ const Features = () => {
   return (
     <section id="features" className="site-bg relative" aria-labelledby="features-heading">
       {/* teal blur behind content — matches Services section for consistent site palette */}
-      <div className="absolute inset-0 bg-gradient-to-br from-teal-50/60 via-teal-100/35 to-teal-200/20 backdrop-blur-md pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-linear-to-br from-teal-50/60 via-teal-100/35 to-teal-200/20 backdrop-blur-md pointer-events-none z-0" />
       <div className="section scroll-mt-20 py-12 md:py-20 relative z-10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">

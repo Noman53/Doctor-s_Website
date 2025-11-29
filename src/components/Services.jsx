@@ -16,7 +16,7 @@ const Services = () => {
   return (
     <section id="services" className="site-bg relative" aria-labelledby="services-heading">
       {/* teal blur gradient behind content — subtle, consistent with site palette */}
-      <div className="absolute inset-0 bg-gradient-to-br from-teal-50/60 via-teal-100/35 to-teal-200/20 backdrop-blur-md pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-linear-to-br from-teal-50/60 via-teal-100/35 to-teal-200/20 backdrop-blur-md pointer-events-none z-0" />
       <div className="section scroll-mt-20 py-10 md:py-16 relative z-10" aria-labelledby="services-heading">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">

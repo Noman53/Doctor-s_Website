@@ -70,7 +70,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
               Appointments
             </span>
             <h2 className="text-3xl font-extrabold text-slate-900 mt-4">Book Your Consultation</h2>
-            <p className="text-slate-600 mt-4">Simple 3-step process. Our team will contact you to confirm.</p>
+            <p className="text-slate-600 mt-4">Simple 3-step process. Team will contact you to confirm.</p>
           </div>
 
           <div className="glass-panel rounded-4xl shadow-2xl border border-white/60 overflow-hidden">
@@ -131,7 +131,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                   </div>
 
                   {/* Calendar */}
-                  <div className="mx-auto w-full max-w-xl p-1 rounded-3xl bg-gradient-to-br from-teal-200/35 via-teal-100/25 to-white/20 shadow-sm">
+                  <div className="mx-auto w-full max-w-xl p-1 rounded-3xl bg-linear-to-br from-teal-200/35 via-teal-100/25 to-white/20 shadow-sm">
                     <div className="rounded-2xl bg-white/40 backdrop-blur-md p-3 md:p-4 border border-white/30">
 
                       <div className="grid grid-cols-7 gap-3 text-center">
