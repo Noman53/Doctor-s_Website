@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://doctor-muhsin.vercel.app/sitemap.xml
