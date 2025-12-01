@@ -1,3 +1,5 @@
+// src/components/Booking.jsx
+
 import React, { useState } from 'react'
 import { Check, ArrowRight, Home, Moon } from 'lucide-react'
 import emailjs from '@emailjs/browser' // npm i @emailjs/browser
@@ -21,6 +23,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
   const now = new Date()
   const displayDate = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1)
   const daysInMonth = new Date(displayDate.getFullYear(), displayDate.getMonth() + 1, 0).getDate()
+  const firstWeekday = new Date(displayDate.getFullYear(), displayDate.getMonth(), 1).getDay() // grid offset
 
   const labelForStep = t('booking.steps', { returnObjects: true }) // 🔁 language switch
 
@@ -67,7 +70,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
           {/* Header */}
           <div className="text-center mb-12">
             <span className="text-teal-700 font-bold uppercase tracking-wider text-xs bg-white/50 px-3 py-1 rounded-full">
-              {t('booking.badge')}{/* 🔁 language switch */}
+              {t('booking.badge')} {/* 🔁 language switch */}
             </span>
             <h2 className="text-3xl font-extrabold text-slate-900 mt-4">{t('booking.title')}</h2> {/* 🔁 language switch */}
             <p className="text-slate-600 mt-4">{t('booking.desc')}</p> {/* 🔁 language switch */}
@@ -88,7 +91,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     }`}>
                       {step > n ? <Check className="h-4 w-4" /> : n}
                     </div>
-                    <span className="text-[10px] mt-2 font-bold uppercase tracking-wider text-slate-600">{label}</span>
+                    <span className="text-[10px] mt-2 font-bold uppercase tracking-wider text-slate-600">{label}</span> {/* 🔁 language switch */}
                   </div>
                 )
               })}
@@ -108,7 +111,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                         monthOffset === 0 ? 'bg-slate-200 text-slate-500 cursor-not-allowed' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
                       }`}
                     >
-                      ← {t('booking.prevMonth')}{/* 🔁 language switch */}
+                      ← {t('booking.prevMonth')} {/* 🔁 language switch */}
                     </button>
 
                     <h3 className="text-xl font-bold text-slate-900 mb-0 text-center flex-1 mx-6">
@@ -119,23 +122,28 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       onClick={() => setMonthOffset((m) => m + 1)}
                       className="px-4 py-2 rounded-lg bg-teal-600 text-white font-bold hover:bg-teal-700 transition"
                     >
-                      {t('booking.nextMonth')} →{/* 🔁 language switch */}
+                      {t('booking.nextMonth')} → {/* 🔁 language switch */}
                     </button>
                   </div>
 
                   {/* Week labels */}
                   <div className="grid grid-cols-7 gap-2 text-center mb-2">
-                    {['S','M','T','W','T','F','S'].map((d) => (
-                      <div key={d} className="text-xs font-bold text-slate-500 uppercase">{d}</div>
-                    ))}
+                    {t('booking.weekdays', { returnObjects: true }).map((d, i) => (
+                      <div key={i} className="text-xs font-bold text-slate-500 uppercase text-center">{d}</div>
+                      ))}
                   </div>
 
                   {/* Calendar */}
                   <div className="mx-auto w-full max-w-xl p-1 rounded-3xl bg-linear-to-br from-teal-200/35 via-teal-100/25 to-white/20 shadow-sm">
                     <div className="rounded-2xl bg-white/40 backdrop-blur-md p-3 md:p-4 border border-white/30">
-
                       <div className="grid grid-cols-7 gap-3 text-center">
 
+                        {/* Offset empty cells for correct weekday alignment */}
+                        {Array.from({ length: firstWeekday }).map((_, i) => (
+                          <div key={`empty-${i}`} />
+                        ))}
+
+                        {/* Actual days */}
                         {Array.from({ length: daysInMonth }).map((_, i) => {
                           const day = i + 1
                           const dateObj = new Date(displayDate.getFullYear(), displayDate.getMonth(), day)
@@ -157,9 +165,9 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                               disabled={disabled}
                               onClick={() => !disabled && setSelectedDate(token)}
                               title={
-                                offDays.includes(weekday) ? 'Chamber closed' :
-                                isPast ? 'Past date' :
-                                `Select ${day}`
+                                offDays.includes(weekday) ? t('booking.calendar.closed') :
+                                isPast ? t('booking.calendar.past') :
+                                t('booking.calendar.select', { day })
                               }
                               className={`px-5 py-3 text-sm transition-transform duration-300 font-semibold border-2 rounded-lg
                                 ${
@@ -212,17 +220,17 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                   <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">{t('booking.timeTitle')}</h3> {/* 🔁 language switch */}
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {timeSlots.map((t) => (
+                    {timeSlots.map((tItem) => (
                       <button
-                        key={t}
-                        onClick={() => setSelectedTime(t)}
+                        key={tItem}
+                        onClick={() => setSelectedTime(tItem)}
                         className={`p-4 rounded-xl text-sm font-bold transition flex items-center justify-center ${
-                          selectedTime === t
+                          selectedTime === tItem
                             ? 'bg-teal-600 text-white shadow-lg'
                             : 'bg-white text-slate-800 hover:bg-teal-50 hover:text-teal-600'
                         }`}
                       >
-                        <Moon className="h-4 w-4 mr-2" /> {t}
+                        <Moon className="h-4 w-4 mr-2" /> {tItem}
                       </button>
                     ))}
                   </div>
@@ -232,7 +240,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       onClick={() => setStep(1)}
                       className="text-slate-500 hover:text-slate-800 font-bold px-6 py-3 rounded-full hover:bg-white/50 transition"
                     >
-                      {t('booking.back')}{/* 🔁 language switch */}
+                      {t('booking.back')} {/* 🔁 language switch */}
                     </button>
 
                     <button
@@ -288,7 +296,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       onClick={() => setStep(2)}
                       className="text-slate-500 hover:text-slate-800 font-bold px-6 py-3 rounded-full hover:bg-white/50 transition"
                     >
-                      {t('booking.back')}{/* 🔁 language switch */}
+                      {t('booking.back')} {/* 🔁 language switch */}
                     </button>
 
                     <button
@@ -298,7 +306,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                         isSubmitting ? 'opacity-70 cursor-wait' : ''
                       }`}
                     >
-                      {isSubmitting ? t('booking.sending') : t('booking.confirm')}{/* 🔁 language switch */}
+                      {isSubmitting ? t('booking.sending') : t('booking.confirm')} {/* 🔁 language switch */}
                     </button>
                   </div>
                 </form>
@@ -310,11 +318,10 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                   <div className="h-24 w-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
                     <Check className="h-12 w-12 text-green-600" />
                   </div>
-                  <h3 className="text-3xl font-extrabold text-slate-900 mb-4">{t('booking.successTitle')}</h3> /* 🔁 language switch */
-
+                  <h3 className="text-3xl font-extrabold text-slate-900 mb-4">{t('booking.successTitle')}</h3> {/* 🔁 language switch */}
 
                   <p className="text-slate-600 text-lg max-w-md mx-auto mb-10 leading-relaxed">
-                    {thankYouMessage || t('booking.successDesc')}{/* 🔁 language switch */}{' '}
+                    {thankYouMessage || t('booking.successDesc')} {/* 🔁 language switch */}{' '}
                     <span className="font-bold text-slate-800">+880 1711-946412</span>
                   </p>
 
@@ -329,7 +336,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     }}
                     className="inline-flex items-center text-teal-700 font-bold hover:text-teal-900 hover:underline transition"
                   >
-                    <Home className="h-5 w-5 mr-2" /> {t('booking.returnHome')}{/* 🔁 language switch */}
+                    <Home className="h-5 w-5 mr-2" /> {t('booking.returnHome')} {/* 🔁 language switch */}
                   </a>
                 </div>
               )}
