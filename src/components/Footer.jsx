@@ -1,7 +1,11 @@
+// src/components/Footer.jsx
 import React from 'react'
 import { ChevronRight, MapPin, Phone, Activity } from 'lucide-react'
+import { useTranslation } from 'react-i18next' // 🔁 language switch
 
 const Footer = () => {
+  const { t } = useTranslation() // 🔁 language switch
+
   return (
     <footer className="relative overflow-hidden -mt-8 md:-mt-12">
       {/* modern upper border — thin gradient separator */}
@@ -25,28 +29,28 @@ const Footer = () => {
                 <Activity className="h-6 w-6 text-white" />
               </div>
               <div>
-                <div className="text-slate-900 text-lg font-bold tracking-tight">Dr. Syed Md. Muhsin</div>
+                <div className="text-slate-900 text-lg font-bold tracking-tight">{t('identity.name')}</div> {/* 🔁 language switch */}
                 <p className="text-[10px] text-teal-800 font-bold tracking-widest uppercase mt-0.5">
-                  General, Laparoscopic & Hepatobiliary Surgeon
+                  {t('identity.subtitle')} {/* 🔁 language switch */}
                 </p>
               </div>
             </div>
             <p className="text-slate-700 max-w-sm leading-relaxed font-medium">
-              Associate Professor of Surgery at Chittagong Medical College & Hospital.
-              Expert in General, Laparoscopic & Hepatobiliary Surgery.
+              {t('about.designation')} {t('footer.at')} {t('about.institute')}. {/* 🔁 language switch */}
+              {t('services.title')}. {/* 🔁 language switch */}
             </p>
           </div>
 
           {/* Links */}
           <div>
-            <h3 className="text-medical-900 font-extrabold mb-4 uppercase tracking-wider text-[12px]">Quick Links</h3>
+            <h3 className="text-medical-900 font-extrabold mb-4 uppercase tracking-wider text-[12px]">{t('footer.quickLinks')}</h3> {/* 🔁 language switch */}
             <ul className="space-y-2 text-sm">
               {[
-                { label: 'Home', href: '#home' },
-                { label: 'About', href: '#about' },
-                { label: 'Specialties', href: '#services' },
-                { label: 'Chamber', href: '#locations' },
-                { label: 'Book Appointment', href: '#booking' },
+                { label: t('navbar.home'), href: '#home' },
+                { label: t('navbar.about'), href: '#about' },
+                { label: t('navbar.services'), href: '#services' },
+                { label: t('navbar.chamber'), href: '#locations' },
+                { label: t('navbar.booking'), href: '#booking' }
               ].map((item) => (
                 <li key={item.label}>
                   <a
@@ -63,15 +67,15 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="text-medical-900 font-extrabold mb-4 uppercase tracking-wider text-[12px]">Contact Info</h3>
+            <h3 className="text-medical-900 font-extrabold mb-4 uppercase tracking-wider text-[12px]">{t('footer.contactInfo')}</h3> {/* 🔁 language switch */}
             <ul className="space-y-3 text-sm">
               <li className="flex items-start text-slate-700 font-medium">
                 <MapPin className="h-5 w-5 mr-3 text-medical-700 mt-0.5 shrink-0" />
-                <span>Surgiscope Hospital, Unit 2<br />Katalgonj, Chawkbazar, Chattogram</span>
+                <span style={{ whiteSpace: 'pre-line' }}>{t('footer.hospitalAddress')}</span> {/* 🔁 language switch */}
               </li>
               <li className="flex items-center text-slate-700 font-medium">
                 <Phone className="h-5 w-5 mr-3 text-medical-700 shrink-0" />
-                <span>+880 1711-946412</span>
+                <span>{t('footer.phone')}</span> {/* 🔁 language switch */}
               </li>
             </ul>
           </div>
@@ -79,7 +83,7 @@ const Footer = () => {
 
         {/* Bottom note */}
         <div className="max-w-7xl mx-auto px-4 pt-4 pb-6 sm:pt-6 sm:pb-8 border-t border-slate-800/20 text-center text-xs text-slate-800 relative z-10">
-          © {new Date().getFullYear()} Dr. Syed Md. Muhsin. All rights reserved.
+          © {new Date().getFullYear()} {t('identity.name')}. {t('footer.rights')} {/* 🔁 language switch */}
         </div>
       </div>
     </footer>

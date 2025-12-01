@@ -1,16 +1,21 @@
 // src/components/Services.jsx
 import React from 'react'
 import { Layers, Activity, GitBranch, Box, Grid, Scissors } from 'lucide-react'
+import { useTranslation } from 'react-i18next' // 🔁 language switch
 
 const Services = () => {
+  const { t } = useTranslation() // 🔁 language switch
+
+  const items = t('services.items', { returnObjects: true }) // 🔁 language switch
+
   const services = [
     // TODO: Add or remove services here as needed
-    { icon: <Layers />, title: 'Gallbladder', desc: 'Treatment for gallstones and inflammation using advanced laparoscopic techniques.' },
-    { icon: <Activity />, title: 'Liver Tumors', desc: 'Surgical management of complex liver conditions including tumors and cysts.' },
-    { icon: <GitBranch />, title: 'Bile Duct', desc: 'Expert surgical care for obstructions, stones, and strictures in the bile ducts.' },
-    { icon: <Box />, title: 'Pancreas', desc: 'Specialized interventions for pancreatitis and pancreatic masses.' },
-    { icon: <Grid />, title: 'Hernia Repair', desc: 'Advanced repair for inguinal, umbilical, and incisional hernias.' },
-    { icon: <Scissors />, title: 'Appendicitis', desc: 'Urgent surgical removal of the appendix to prevent rupture and complications.' }, // added from screenshot
+    { icon: <Layers />, title: items.gallbladder[0], desc: items.gallbladder[1] }, // 🔁 language switch
+    { icon: <Activity />, title: items.liver[0], desc: items.liver[1] }, // 🔁 language switch
+    { icon: <GitBranch />, title: items.bile[0], desc: items.bile[1] }, // 🔁 language switch
+    { icon: <Box />, title: items.pancreas[0], desc: items.pancreas[1] }, // 🔁 language switch
+    { icon: <Grid />, title: items.hernia[0], desc: items.hernia[1] }, // 🔁 language switch
+    { icon: <Scissors />, title: items.appendix[0], desc: items.appendix[1] } // 🔁 language switch
   ]
 
   return (
@@ -21,13 +26,13 @@ const Services = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-teal-700 font-bold uppercase tracking-wider text-sm bg-white/60 px-4 py-1 rounded-full border border-white/50">
-              Expertise
+              {t('services.badge')} {/* 🔁 language switch */}
             </span>
             <h2 id="services-heading" className="text-4xl font-extrabold text-slate-900 mt-4 mb-6">
-              Specialized Treatments
+              {t('services.title')} {/* 🔁 language switch */}
             </h2>
             <p className="text-lg text-slate-600 leading-relaxed">
-              Comprehensive surgical solutions for gastrointestinal and hepatobiliary conditions.
+              {t('services.desc')} {/* 🔁 language switch */}
             </p>
           </div>
 
@@ -40,8 +45,8 @@ const Services = () => {
                 <div className="w-16 h-16 bg-white/80 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-600 transition-colors duration-500 shadow-sm" aria-hidden="true">
                   {React.cloneElement(s.icon, { className: "h-8 w-8 text-teal-600 group-hover:text-white transition-colors duration-300" })}
                 </div>
-                <h3 className="text-2xl font-bold text-gradient mb-4">{s.title}</h3>
-                <p className="text-slate-600 mb-6 leading-relaxed">{s.desc}</p>
+                <h3 className="text-2xl font-bold text-gradient mb-4">{s.title}</h3> {/* 🔁 language switch */}
+                <p className="text-slate-600 mb-6 leading-relaxed">{s.desc}</p> {/* 🔁 language switch */}
                 {/* NOTE: "View Details" removed — keep card concise. Add CTA later if needed. */}
                </div>
              ))}

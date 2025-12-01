@@ -1,0 +1,91 @@
+{
+  "identity": {
+    "name": "Dr. Syed Md. Muhsin",
+    "subtitle": "General, Laparoscopic & Hepatobiliary Surgeon"
+  },
+  "navbar": {
+    "home": "Home",
+    "about": "About",
+    "services": "Specialties",
+    "chamber": "Chamber",
+    "booking": "Book Appointment"
+  },
+  "hero": {
+    "badge": "Associate Professor of Surgery",
+    "headlineLine1": "Expert Care for",
+    "headlineLine2": "Liver & Abdominal Health",
+    "desc": "Dr. Syed Md. Muhsin provides specialized care in General, Laparoscopic, and Hepatobiliary surgery. Treating complex conditions of the gallbladder, liver, and pancreas with precision.",
+    "book": "Book Consultation",
+    "viewServices": "View Specialties",
+    "trust": { "frcs": "FRCS (Hon.)", "facs": "FACS (Hon.)", "hb": "Hepatobiliary Specialist" }
+  },
+  "about": {
+    "meet": "Meet Your Surgeon",
+    "name": "Dr. Syed Md. Muhsin",
+    "designation": "Associate Professor of Surgery",
+    "institute": "Chittagong Medical College & Hospital",
+    "bio1": "Dr. Syed Md. Muhsin is a highly skilled General, Laparoscopic, and Hepatobiliary surgeon in Chattogram.",
+    "bio2": "He specializes in gallbladder diseases, liver tumors, bile duct disorders, pancreatic diseases, and routine procedures like hernia repair and appendectomies.",
+    "degreesTitle": "Qualifications & Degrees",
+    "degrees": ["MBBS, MCPS, MS","FCPS (Hepatobiliary)","FRCS (Hon.), FACS","FMAS Fellowship"],
+    "visitChamber": "Visit Chamber at Surgiscope Hospital"
+  },
+  "services": {
+    "badge": "Expertise",
+    "title": "Specialized Treatments",
+    "desc": "Comprehensive surgical solutions for gastrointestinal and hepatobiliary conditions.",
+    "items": {
+      "gallbladder": ["Gallbladder", "Treatment for gallstones and inflammation using advanced laparoscopic techniques."],
+      "liver": ["Liver Tumors", "Surgical management of complex liver conditions including tumors and cysts."],
+      "bile": ["Bile Duct", "Expert surgical care for obstructions, stones, and strictures in the bile ducts."],
+      "pancreas": ["Pancreas", "Specialized interventions for pancreatitis and pancreatic masses."],
+      "hernia": ["Hernia Repair", "Advanced repair for inguinal, umbilical, and incisional hernias."],
+      "appendix": ["Appendicitis", "Urgent surgical removal of the appendix to prevent rupture and complications."]
+    }
+  },
+  "features": {
+    "title": "Why Choose Dr. Muhsin?",
+    "desc": "Modern surgical care with advanced techniques and patient‑centric approach.",
+    "items": {
+      "advanced": ["Advanced Surgery", "Specialized in Hepatobiliary surgery for complex liver and bile duct disorders."],
+      "minimally": ["Minimally Invasive", "Laparoscopic techniques ensuring smaller incisions, less pain, and quicker recovery."],
+      "patient": ["Patient-Centric", "Providing compassionate consultations at Surgiscope Hospital, Chattogram."]
+    }
+  },
+  "locations": {
+    "badge": "Chamber",
+    "title": "Visit Dr. Muhsin",
+    "descLead": "Book your consultation at",
+    "descTail": "Surgiscope Hospital, Chattogram",
+    "hospital": "Surgiscope Hospital, Chattogram",
+    "address": "Address: Unit 2, 445/466, Katalgonj, Chawkbazar, Chattogram – 4203",
+    "hours": "Visiting Hour: 6pm to 9pm (Closed: Friday)",
+    "phone": "Appointment: +8801711946412",
+    "cta": "Get Directions"
+  },
+  "booking": {
+    "badge": "Appointments",
+    "title": "Book Your Consultation",
+    "desc": "Simple 3-step process. Team will contact you to confirm.",
+    "steps": ["Date","Time","Details"],
+    "timeTitle": "Select Time Slot",
+    "detailsTitle": "Patient Details",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "reason": "Reason for Visit",
+    "back": "Back",
+    "next": "Next Step",
+    "confirm": "Confirm Booking",
+    "sending": "Sending...",
+    "successTitle": "Booking Confirmed!",
+    "successDesc": "Thank you. Your appointment request has been received. Our assistant will call you",
+    "returnHome": "Return to Home"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "contactInfo": "Contact Info",
+    "hospitalAddress": "Surgiscope Hospital, Unit 2\nKatalgonj, Chawkbazar, Chattogram",
+    "phone": "+880 1711-946412",
+    "rights": "All rights reserved."
+  }
+}

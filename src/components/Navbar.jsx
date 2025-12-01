@@ -1,16 +1,25 @@
-// src/components/Navbar.jsx
 import React, { useEffect, useState } from 'react'
 import { Activity, Menu } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 const Navbar = () => {
   const [open, setOpen] = useState(false)
   const [shrunk, setShrunk] = useState(false)
+  const { t, i18n } = useTranslation()
+  const isBn = i18n.language === 'bn'
 
   useEffect(() => {
     const onScroll = () => setShrunk(window.scrollY > 20)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  const toggleLanguage = () => {
+    const next = isBn ? 'en' : 'bn'
+    i18n.changeLanguage(next)
+    localStorage.setItem('lang', next)
+    document.documentElement.lang = next
+  }
 
   return (
     <header>
@@ -31,10 +40,10 @@ const Navbar = () => {
               </div>
               <div className="ml-3">
                 <span className="text-lg font-bold text-slate-900 tracking-tight group-hover:text-teal-700 transition-colors">
-                  Dr. Syed Md. Muhsin
+                  {t('identity.name')}
                 </span>
                 <p className="text-[10px] text-teal-800 font-bold tracking-widest uppercase mt-1">
-                  General, Laparoscopic & Hepatobiliary Surgeon
+                  {t('identity.subtitle')}
                 </p>
               </div>
             </a>
@@ -42,10 +51,10 @@ const Navbar = () => {
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center space-x-2" aria-label="Primary navigation">
               {[
-                { label: 'Home', href: '#home' },
-                { label: 'About', href: '#about' },
-                { label: 'Specialties', href: '#services' }, // matches Services id
-                { label: 'Chamber', href: '#locations' }
+                { label: t('navbar.home'), href: '#home' },
+                { label: t('navbar.about'), href: '#about' },
+                { label: t('navbar.services'), href: '#services' },
+                { label: t('navbar.chamber'), href: '#locations' }
               ].map((item, i) => (
                 <a
                   key={i}
@@ -55,18 +64,26 @@ const Navbar = () => {
                   {item.label}
                 </a>
               ))}
-             <a
-               href="#booking"
-               className="ml-4 bg-teal-600 hover:bg-teal-700 text-white px-6 py-2.5 rounded-full text-sm font-medium transition shadow-lg shadow-teal-600/20 transform hover:-translate-y-0.5"
-             >
-               Book Appointment
-             </a>
-           </nav>
+              <a
+                href="#booking"
+                className="ml-4 bg-teal-600 hover:bg-teal-700 text-white px-6 py-2.5 rounded-full text-sm font-medium transition shadow-lg shadow-teal-600/20 transform hover:-translate-y-0.5"
+              >
+                {t('navbar.booking')}
+              </a>
+
+              {/* Language Switch Button */}
+              <button
+                onClick={toggleLanguage}
+                className="ml-4 px-5 py-2 rounded-full bg-white/60 text-slate-800 border border-white/50 hover:bg-white cursor-pointer transition font-semibold shadow-sm hover:shadow-md"
+              >
+                {isBn ? 'English' : 'বাংলা'} {/* 🔁 Bangla translation toggle */}
+              </button>
+            </nav>
 
             {/* Mobile button */}
             <button
               onClick={() => setOpen(!open)}
-              className="md:hidden p-2 text-slate-700 hover:text-teal-700 hover:bg-white/40 rounded-lg transition-colors"
+              className="md:hidden p-2 text-slate-700 hover:text-teal-700 hover:bg-white/40 rounded-lg transition-colors cursor-pointer"
               aria-label="Toggle menu"
               aria-expanded={open}
               aria-controls="mobile-menu"
@@ -84,30 +101,36 @@ const Navbar = () => {
           >
             <div className="px-4 pt-2 pb-6 space-y-1" role="menu" aria-label="Mobile navigation">
               {[
-                { label: 'Home', href: '#home' },
-                { label: 'About', href: '#about' },
-                { label: 'Specialties', href: '#services' },
-                { label: 'Chamber', href: '#locations' }
+                { label: t('navbar.home'), href: '#home' },
+                { label: t('navbar.about'), href: '#about' },
+                { label: t('navbar.services'), href: '#services' },
+                { label: t('navbar.chamber'), href: '#locations' }
               ].map((item, i) => (
                 <a
                   key={i}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="block w-full text-left px-4 py-3 text-slate-800 font-medium hover:bg-white/60 rounded-lg transition-colors"
+                  className="block w-full text-left px-4 py-3 text-slate-800 font-medium hover:bg-white/60 rounded-lg transition-colors cursor-pointer"
                   role="menuitem"
                 >
                   {item.label}
                 </a>
               ))}
-              <div className="pt-2 px-2">
+              <div className="pt-2 px-2 flex gap-2">
                 <a
                   href="#booking"
                   onClick={() => setOpen(false)}
-                  className="block w-full text-center px-4 py-3 bg-teal-600 text-white font-bold rounded-lg shadow-md hover:bg-teal-700 transition-colors"
+                  className="block w-full text-center px-4 py-3 bg-teal-600 text-white font-bold rounded-lg shadow-md hover:bg-teal-700 transition-colors cursor-pointer"
                   role="menuitem"
                 >
-                  Book Appointment
+                  {t('navbar.booking')}
                 </a>
+                <button
+                  onClick={() => { toggleLanguage(); setOpen(false) }}
+                  className="px-4 py-3 bg-white/70 text-slate-800 font-bold rounded-lg border border-white/40 hover:bg-white transition-colors w-28 cursor-pointer"
+                >
+                  {isBn ? 'English' : 'বাংলা'} {/* 🔁 Bangla translation toggle */}
+                </button>
               </div>
             </div>
           </div>

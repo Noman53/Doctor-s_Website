@@ -4,8 +4,11 @@
 import React from 'react'
 import doctorImg from '../assets/Dr-Syed-Md-Muhsin.jpg'
 import { Award, ShieldCheck, Activity, Stethoscope } from 'lucide-react'
+import { useTranslation } from 'react-i18next' // 🔁 language switch
 
 const Hero = () => {
+  const { t } = useTranslation() // 🔁 language switch
+
   return (
     <section className="site-bg relative">
       {/* overlay behind content so headings and text remain sharp */}
@@ -26,25 +29,26 @@ const Hero = () => {
             <div className="lg:col-span-6 text-center lg:text-left pt-4 lg:pt-0">
               <div className="inline-flex items-center px-4 py-2 rounded-full glass-panel mb-6 mt-6 md:mt-10 shadow-sm border border-white/60 relative z-70">
                 <span className="w-2 h-2 rounded-full bg-teal-600 mr-2 animate-pulse"></span>
-                <span className="text-xs font-bold text-teal-800 uppercase tracking-wide">Associate Professor of Surgery</span>
+                <span className="text-xs font-bold text-teal-800 uppercase tracking-wide">
+                  {t('hero.badge')} {/* 🔁 language switch */}
+                </span>
               </div>
               
               <h1 id="hero-heading" className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 mb-5 drop-shadow-sm leading-tight">
-                Expert Care for <br />
-                <span className="text-gradient">Liver & Abdominal Health</span>
+                {t('hero.headlineLine1')} <br />
+                <span className="text-gradient">{t('hero.headlineLine2')}</span> {/* 🔁 language switch */}
               </h1>
               
               <p className="mt-4 text-base sm:text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
-                Dr. Syed Md. Muhsin provides specialized care in General, Laparoscopic, and Hepatobiliary surgery.
-                Treating complex conditions of the gallbladder, liver, and pancreas with precision.
+                {t('hero.desc')} {/* 🔁 language switch */}
               </p>
               
               <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <a href="#booking" className="flex items-center justify-center px-8 py-4 text-base font-bold rounded-full text-white bg-teal-600 hover:bg-teal-700 shadow-xl hover:shadow-teal-600/40 transition-all duration-300 transform hover:-translate-y-1">
-                  Book Consultation
+                  {t('hero.book')} {/* 🔁 language switch */}
                 </a>
                 <a href="#services" className="flex items-center justify-center px-8 py-4 border border-teal-200/50 text-base font-bold rounded-full text-teal-800 glass-card hover:bg-white transition-all duration-300">
-                  View Specialties
+                  {t('hero.viewServices')} {/* 🔁 language switch */}
                 </a>
               </div>
 
@@ -52,15 +56,15 @@ const Hero = () => {
               <div className="mt-10 pt-6 border-t border-teal-200/30 flex flex-wrap justify-center lg:justify-start gap-6 lg:gap-10 opacity-90">
                 <div className="flex items-center space-x-2 text-slate-700 font-medium">
                   <div className="p-2 bg-white/50 rounded-lg" aria-hidden="true"><Award className="h-5 w-5 text-teal-700" /></div>
-                  <span>FRCS (Hon.)</span>
+                  <span>{t('hero.trust.frcs')}</span> {/* 🔁 language switch */}
                 </div>
                 <div className="flex items-center space-x-2 text-slate-700 font-medium">
                   <div className="p-2 bg-white/50 rounded-lg" aria-hidden="true"><ShieldCheck className="h-5 w-5 text-teal-700" /></div>
-                  <span>FACS (Hon.)</span>
+                  <span>{t('hero.trust.facs')}</span> {/* 🔁 language switch */}
                 </div>
                 <div className="flex items-center space-x-2 text-slate-700 font-medium">
                   <div className="p-2 bg-white/50 rounded-lg" aria-hidden="true"><Activity className="h-5 w-5 text-teal-700" /></div>
-                  <span>Hepatobiliary Specialist</span>
+                  <span>{t('hero.trust.hb')}</span> {/* 🔁 language switch */}
                 </div>
               </div>
             </div>
@@ -71,7 +75,7 @@ const Hero = () => {
                 <img
                   className="w-full h-full object-cover"
                   src={doctorImg}
-                  alt="Portrait of Dr. Syed Md. Muhsin"
+                  alt={t('identity.name')} /* 🔁 language switch */
                   loading="lazy"
                 />
                 {/* Overlay gradient */}
@@ -80,9 +84,9 @@ const Hero = () => {
               {/* Floating Card */}
               <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 glass-panel p-4 rounded-2xl shadow-lg z-20 flex items-center justify-between border border-white/40 w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%]">
                 <div>
-                  <p className="text-sm font-bold text-slate-900">Dr. Syed Md. Muhsin</p>
-                  <p className="text-xs text-teal-700 font-semibold">Associate Professor of Surgery</p>
-                  <p className="text-xs text-teal-700 font-semibold">Chittagong Medical College</p>
+                  <p className="text-sm font-bold text-slate-900">{t('identity.name')}</p> {/* 🔁 language switch */}
+                  <p className="text-xs text-teal-700 font-semibold">{t('hero.badge')}</p> {/* 🔁 language switch */}
+                  <p className="text-xs text-teal-700 font-semibold">Chittagong Medical College</p> {/* keep as-is or add translation key if needed */}
                 </div>
                 <div className="h-12 w-12 bg-teal-600 rounded-full flex items-center justify-center text-white shadow-lg" aria-hidden="true">
                   <Stethoscope className="h-6 w-6" />

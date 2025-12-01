@@ -1,10 +1,10 @@
-// src/components/Booking.jsx
-
 import React, { useState } from 'react'
 import { Check, ArrowRight, Home, Moon } from 'lucide-react'
 import emailjs from '@emailjs/browser' // npm i @emailjs/browser
+import { useTranslation } from 'react-i18next' // 🔁 language switch
 
 const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has been received. Our assistant will call you for final confirmation.' }) => {
+  const { t } = useTranslation() // 🔁 language switch
   const [step, setStep] = useState(1)
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedTime, setSelectedTime] = useState(null)
@@ -22,7 +22,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
   const displayDate = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1)
   const daysInMonth = new Date(displayDate.getFullYear(), displayDate.getMonth() + 1, 0).getDate()
 
-  const labelForStep = ['Date', 'Time', 'Details']
+  const labelForStep = t('booking.steps', { returnObjects: true }) // 🔁 language switch
 
   // EmailJS
   const handleSubmit = async (e) => {
@@ -52,7 +52,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
       setStep(4)
     } catch (err) {
       console.error('EmailJS error', err)
-      alert('There was an issue sending confirmation email. Please try again or call +880 1711-946412.')
+      alert(t('booking.error')) // 🔁 language switch
     } finally {
       setIsSubmitting(false)
     }
@@ -67,10 +67,10 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
           {/* Header */}
           <div className="text-center mb-12">
             <span className="text-teal-700 font-bold uppercase tracking-wider text-xs bg-white/50 px-3 py-1 rounded-full">
-              Appointments
+              {t('booking.badge')}{/* 🔁 language switch */}
             </span>
-            <h2 className="text-3xl font-extrabold text-slate-900 mt-4">Book Your Consultation</h2>
-            <p className="text-slate-600 mt-4">Simple 3-step process. Team will contact you to confirm.</p>
+            <h2 className="text-3xl font-extrabold text-slate-900 mt-4">{t('booking.title')}</h2> {/* 🔁 language switch */}
+            <p className="text-slate-600 mt-4">{t('booking.desc')}</p> {/* 🔁 language switch */}
           </div>
 
           <div className="glass-panel rounded-4xl shadow-2xl border border-white/60 overflow-hidden">
@@ -108,7 +108,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                         monthOffset === 0 ? 'bg-slate-200 text-slate-500 cursor-not-allowed' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
                       }`}
                     >
-                      ← Prev Month
+                      ← {t('booking.prevMonth')}{/* 🔁 language switch */}
                     </button>
 
                     <h3 className="text-xl font-bold text-slate-900 mb-0 text-center flex-1 mx-6">
@@ -119,7 +119,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       onClick={() => setMonthOffset((m) => m + 1)}
                       className="px-4 py-2 rounded-lg bg-teal-600 text-white font-bold hover:bg-teal-700 transition"
                     >
-                      Next Month →
+                      {t('booking.nextMonth')} →{/* 🔁 language switch */}
                     </button>
                   </div>
 
@@ -200,7 +200,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                           : 'bg-slate-300 text-slate-600 cursor-not-allowed'
                       }`}
                     >
-                      Next Step <ArrowRight className="ml-2 h-4 w-4" />
+                      {t('booking.next')} <ArrowRight className="ml-2 h-4 w-4" /> {/* 🔁 language switch */}
                     </button>
                   </div>
                 </>
@@ -209,7 +209,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
               {/* STEP 2 — TIME */}
               {step === 2 && (
                 <>
-                  <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">Select Time Slot</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">{t('booking.timeTitle')}</h3> {/* 🔁 language switch */}
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {timeSlots.map((t) => (
@@ -232,7 +232,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       onClick={() => setStep(1)}
                       className="text-slate-500 hover:text-slate-800 font-bold px-6 py-3 rounded-full hover:bg-white/50 transition"
                     >
-                      Back
+                      {t('booking.back')}{/* 🔁 language switch */}
                     </button>
 
                     <button
@@ -244,7 +244,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                           : 'bg-slate-300 text-slate-600 cursor-not-allowed'
                       }`}
                     >
-                      Next Step <ArrowRight className="ml-2 h-4 w-4" />
+                      {t('booking.next')} <ArrowRight className="ml-2 h-4 w-4" /> {/* 🔁 language switch */}
                     </button>
                   </div>
                 </>
@@ -253,13 +253,12 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
               {/* STEP 3 — DETAILS */}
               {step === 3 && (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">Patient Details</h3>
-
+                  <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">{t('booking.detailsTitle')}</h3> {/* 🔁 language switch */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <input
                       type="text"
                       required
-                      placeholder="Full Name"
+                      placeholder={t('booking.fullName')} /* 🔁 language switch */
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       className="w-full p-4 rounded-2xl border border-white/50 bg-white focus:ring-2 focus:ring-teal-500"
@@ -267,7 +266,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     <input
                       type="tel"
                       required
-                      placeholder="Phone Number"
+                      placeholder={t('booking.phone')}/* 🔁 language switch */
                       value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
                       className="w-full p-4 rounded-2xl border border-white/50 bg-white focus:ring-2 focus:ring-teal-500"
@@ -277,7 +276,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                   <textarea
                     rows={3}
                     required
-                    placeholder="Reason for Visit"
+                    placeholder={t('booking.reason')} /* 🔁 language switch */
                     value={form.reason}
                     onChange={(e) => setForm({ ...form, reason: e.target.value })}
                     className="w-full p-4 rounded-2xl border border-white/50 bg-white focus:ring-2 focus:ring-teal-500"
@@ -289,7 +288,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       onClick={() => setStep(2)}
                       className="text-slate-500 hover:text-slate-800 font-bold px-6 py-3 rounded-full hover:bg-white/50 transition"
                     >
-                      Back
+                      {t('booking.back')}{/* 🔁 language switch */}
                     </button>
 
                     <button
@@ -299,7 +298,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                         isSubmitting ? 'opacity-70 cursor-wait' : ''
                       }`}
                     >
-                      {isSubmitting ? 'Sending...' : 'Confirm Booking'}
+                      {isSubmitting ? t('booking.sending') : t('booking.confirm')}{/* 🔁 language switch */}
                     </button>
                   </div>
                 </form>
@@ -311,12 +310,12 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                   <div className="h-24 w-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
                     <Check className="h-12 w-12 text-green-600" />
                   </div>
-                  <h3 className="text-3xl font-extrabold text-slate-900 mb-4">Booking Confirmed!</h3>
+                  <h3 className="text-3xl font-extrabold text-slate-900 mb-4">{t('booking.successTitle')}</h3> /* 🔁 language switch */
+
 
                   <p className="text-slate-600 text-lg max-w-md mx-auto mb-10 leading-relaxed">
-                    {thankYouMessage}{' '}
+                    {thankYouMessage || t('booking.successDesc')}{/* 🔁 language switch */}{' '}
                     <span className="font-bold text-slate-800">+880 1711-946412</span>
-                    {' '}for final confirmation.
                   </p>
 
                   <a
@@ -330,7 +329,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     }}
                     className="inline-flex items-center text-teal-700 font-bold hover:text-teal-900 hover:underline transition"
                   >
-                    <Home className="h-5 w-5 mr-2" /> Return to Home
+                    <Home className="h-5 w-5 mr-2" /> {t('booking.returnHome')}{/* 🔁 language switch */}
                   </a>
                 </div>
               )}

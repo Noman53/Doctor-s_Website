@@ -1,6 +1,3 @@
-// src/components/FloatingButton.jsx
-// Purpose: Minimal floating communication button with click-to-expand and smooth transitions.
-
 import React, { useEffect, useRef, useState } from 'react'
 import { Phone, MessageCircle, MessageSquare } from 'lucide-react'
 

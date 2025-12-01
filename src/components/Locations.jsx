@@ -3,8 +3,11 @@
 
 import React from 'react'
 import { MapPin, Phone, Clock } from 'lucide-react'
+import { useTranslation } from 'react-i18next' // 🔁 language switch
 
 const Locations = () => {
+  const { t } = useTranslation() // 🔁 language switch
+
   return (
     <section className="site-bg relative">
       {/* overlay stays behind content so it doesn't blur text */}
@@ -15,18 +18,18 @@ const Locations = () => {
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="inline-block mb-4 px-5 py-1 rounded-full border border-teal-300 bg-white/60 text-teal-800 font-semibold text-sm tracking-wide shadow-sm">
-              Chamber
+              {t('locations.badge')} {/* 🔁 language switch */}
             </span>
             <h2
               id="locations-heading"
               className="text-4xl font-extrabold text-slate-900 mb-4 leading-tight"
             >
-              Visit Dr. Muhsin
+              {t('locations.title')} {/* 🔁 language switch */}
             </h2>
             <p className="text-lg text-slate-600 leading-relaxed">
-              Book your consultation at{" "}
+              {t('locations.descLead')}{" "}
               <span className="text-teal-700 font-semibold">
-                Surgiscope Hospital, Chattogram
+                {t('locations.descTail')} {/* 🔁 language switch */}
               </span>.
             </p>
           </div>
@@ -38,33 +41,33 @@ const Locations = () => {
             <div className="glass-panel rounded-3xl p-10 shadow-xl flex flex-col justify-center">
               <h3 className="text-2xl font-bold text-slate-900 mb-4 flex items-center">
                 <MapPin className="h-6 w-6 text-teal-600 mr-2" aria-hidden="true" />
-                Surgiscope Hospital, Chattogram
+                {t('locations.hospital')} {/* 🔁 language switch */}
               </h3>
               <p className="text-slate-600 mb-6 leading-relaxed">
-                Address: Unit 2, 445/466, Katalgonj, Chawkbazar, Chattogram – 4203
+                {t('locations.address')} {/* 🔁 language switch */}
               </p>
               
               <div className="space-y-4 mb-6">
                 <div className="flex items-center text-slate-700">
                   <Clock className="h-5 w-5 text-teal-600 mr-3" aria-hidden="true" />
                   <span className="font-medium">
-                    Visiting Hour: 6pm to 9pm (Closed: Friday)
+                    {t('locations.hours')} {/* 🔁 language switch */}
                   </span>
                 </div>
                 <div className="flex items-center text-slate-700">
                   <Phone className="h-5 w-5 text-teal-600 mr-3" aria-hidden="true" />
-                  <span className="font-medium">Appointment: +8801711946412</span>
+                  <span className="font-medium">{t('locations.phone')}</span> {/* 🔁 language switch */}
                 </div>
               </div>
 
               {/* Get Directions Button */}
               <a
-                href="https://www.google.com/maps/dir/?api=1&destination=Surgiscope+Hospital+Chittagong"
+                href="https://www.google.com/maps/dir/?api=1&destination=Surgiscope+Hospital+Chattogram"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block px-6 py-3 bg-teal-600 text-white font-semibold rounded-full shadow-md hover:bg-teal-700 transition"
               >
-                Get Directions
+                {t('locations.cta')} {/* 🔁 language switch */}
               </a>
             </div>
 
