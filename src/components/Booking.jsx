@@ -127,11 +127,13 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                   </div>
 
                   {/* Week labels */}
-                  <div className="grid grid-cols-7 gap-2 text-center mb-2">
+                  <div className="grid grid-cols-7 gap-3 mb-2">
                     {t('booking.weekdays', { returnObjects: true }).map((d, i) => (
-                      <div key={i} className="text-xs font-bold text-slate-500 uppercase text-center">{d}</div>
+                      <div
+                      key={i}
+                      className="flex items-center justify-center text-xs font-bold text-slate-500 uppercase h-10">{d}</div>
                       ))}
-                  </div>
+                      </div>
 
                   {/* Calendar */}
                   <div className="mx-auto w-full max-w-xl p-1 rounded-3xl bg-linear-to-br from-teal-200/35 via-teal-100/25 to-white/20 shadow-sm">

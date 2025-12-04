@@ -36,8 +36,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-slate-700 max-w-sm leading-relaxed font-medium">
-              {t('about.designation')} {t('footer.at')} {t('about.institute')}. {/* 🔁 language switch */}
-              {t('services.title')}. {/* 🔁 language switch */}
+              {t('about.designation')} {t('about.institute')}. {/* 🔁 language switch */}
             </p>
           </div>
 
