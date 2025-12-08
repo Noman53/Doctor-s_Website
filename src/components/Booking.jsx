@@ -1,6 +1,4 @@
-// src/components/Booking.jsx
-
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react' // Added useRef
 import { Check, ArrowRight, Home, Moon } from 'lucide-react'
 import emailjs from '@emailjs/browser' // npm i @emailjs/browser
 import { useTranslation } from 'react-i18next' // 🔁 language switch
@@ -10,14 +8,21 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
   const [step, setStep] = useState(1)
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedTime, setSelectedTime] = useState(null)
-  const [form, setForm] = useState({ name: '', phone: '', reason: '' })
+
+  // Form data state
+  const [form, setForm] = useState({ name: '', phone: '', reason: '', email: '', age: '' })
+  // -----------------------------------------------------------------------
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [monthOffset, setMonthOffset] = useState(0)
 
-  // 🔧 Customize off-days (0 = Sunday, 6 = Saturday)
+  // NEW: EmailJS requires an actual form reference
+  const formRef = useRef(null)
+
+  // Customize off-days (0 = Sunday, 6 = Saturday)
   const offDays = [5] // Friday
 
-  // 🔧 Time slots
+  // Time slots
   const timeSlots = ['06:00 PM','06:30 PM','07:00 PM','07:30 PM','08:00 PM','08:30 PM']
 
   const now = new Date()
@@ -27,32 +32,105 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
 
   const labelForStep = t('booking.steps', { returnObjects: true }) // 🔁 language switch
 
-  // EmailJS
+  /*  
+  ================================================================
+      ✅ FIXED EMAILJS — Modern version using sendForm()
+      - Uses formRef
+      - Sends all fields correctly
+      - Date ✓ Time ✓ Name ✓ Phone ✓ Reason ✓
+      - No environment variables needed
+      - + Added: optional email & age, auto-reply, sheets webhook
+  ================================================================
+  */
+
+  // -------------------------
+  // Helper: Bangladesh phone validation
+  // Accepts: 01XXXXXXXXX, 8801XXXXXXXXX, +8801XXXXXXXXX
+  // -------------------------
+  const isValidBangladeshPhone = (phone) => {
+    if (!phone) return false
+    const cleaned = phone.replace(/\s+/g, '')
+    return /^(?:\+?88)?01[0-9]{9}$/.test(cleaned)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (isSubmitting) return
+
+    // Validate BD phone number
+    if (!isValidBangladeshPhone(form.phone)) {
+      alert(t('booking.invalidPhone') || 'Please enter a valid Bangladeshi phone number (e.g. 01XXXXXXXXX).')
+      return
+    }
+
     setIsSubmitting(true)
 
+    // FIX DATE: token is "YYYY-M-D" with month 1-based — convert to JS Date with (m-1)
     const [y, m, d] = (selectedDate || '').split('-').map(Number)
-    const formattedDate = selectedDate ? new Date(y, m, d).toLocaleDateString() : ''
+    const formattedDate = selectedDate ? new Date(y, m - 1, d).toLocaleDateString() : ''
 
-    const templateParams = {
-      patient_name: form.name,
-      patient_phone: form.phone,
-      appointment_date: formattedDate,
-      appointment_time: selectedTime || '',
-      reason: form.reason,
-      doctor: 'Dr. Syed Md. Muhsin',
+    // Fill hidden inputs (sendForm reads directly from DOM)
+    if (formRef.current) {
+      formRef.current.appointment_date.value = formattedDate
+      formRef.current.appointment_time.value = selectedTime || ''
+      formRef.current.doctor.value = 'Dr. Syed Md. Muhsin'
+      // optional fields
+      if (formRef.current.email) formRef.current.email.value = form.email || ''
+      if (formRef.current.age) formRef.current.age.value = form.age || ''
     }
 
     try {
-      await emailjs.send(
-        process.env.REACT_APP_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID',
-        process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID',
-        templateParams,
-        process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
+      // Send booking email (to doctor / clinic)
+      await emailjs.sendForm(
+        'service_qhjc81w',     // ✅ Your service ID
+        'template_dtcsl71',    // ✅ Your template ID
+        formRef.current,       // ✅ MUST be the form element
+        '168fienQygeV1wIck'    // ✅ Your public key
       )
-      setStep(4)
+
+      // Auto-reply only if patient provided email (non-blocking)
+      if (form.email && form.email.trim()) {
+        try {
+          await emailjs.send(
+            'service_qhjc81w',
+            'template_auto_reply_dummy', // <-- dummy, replace with real template id later
+            {
+              name: form.name,
+              to_email: form.email,
+              appointment_date: formattedDate,
+              appointment_time: selectedTime || '',
+              doctor: 'Dr. Syed Md. Muhsin'
+            },
+            '168fienQygeV1wIck'
+          )
+        } catch (autoErr) {
+          // auto-reply failed — log but continue
+          console.warn('Auto-reply failed:', autoErr)
+        }
+      }
+
+      // Send to Google Sheets via webhook (dummy URL for now; replace with your Apps Script URL)
+      try {
+        await fetch('https://example.com/google_sheets_webhook', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: form.name,
+            phone: form.phone,
+            reason: form.reason,
+            email: form.email || '',
+            age: form.age || '',
+            appointment_date: formattedDate,
+            appointment_time: selectedTime || '',
+            doctor: 'Dr. Syed Md. Muhsin',
+            timestamp: new Date().toISOString()
+          })
+        })
+      } catch (sheetErr) {
+        console.warn('Google Sheets webhook error (non-fatal):', sheetErr)
+      }
+
+      setStep(4) // Success page
     } catch (err) {
       console.error('EmailJS error', err)
       alert(t('booking.error')) // 🔁 language switch
@@ -60,6 +138,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
       setIsSubmitting(false)
     }
   }
+
 
   return (
     <section className="site-bg relative">
@@ -100,7 +179,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
             {/* Body */}
             <div className="p-8 sm:p-12 min-h-[420px]">
 
-              {/* STEP 1 — DATE */}
+              {/* STEP 1 — DATE*/}
               {step === 1 && (
                 <>
                   <div className="flex items-center justify-between mb-6">
@@ -127,12 +206,14 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                   </div>
 
                   {/* Week labels */}
-                  <div className="grid grid-cols-7 gap-3 mb-2">
-                    {t('booking.weekdays', { returnObjects: true }).map((d, i) => (
+                  <div className="mx-auto w-full max-w-xl px-1 mb-1">
+                    <div className="grid grid-cols-7 gap-3">
+                    {t('booking.weekdays', { returnObjects: true }).map((d, i) => ( /* 🔁 language switch */
                       <div
                       key={i}
-                      className="flex items-center justify-center text-xs font-bold text-slate-500 uppercase h-10">{d}</div>
+                      className="flex items-center justify-center text-[12px] font-bold text-slate-800 uppercase h-8 tracking-wide">{d}</div>
                       ))}
+                      </div>
                       </div>
 
                   {/* Calendar */}
@@ -140,7 +221,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     <div className="rounded-2xl bg-white/40 backdrop-blur-md p-3 md:p-4 border border-white/30">
                       <div className="grid grid-cols-7 gap-3 text-center">
 
-                        {/* Offset empty cells for correct weekday alignment */}
+                        {/* Offset empty cells */}
                         {Array.from({ length: firstWeekday }).map((_, i) => (
                           <div key={`empty-${i}`} />
                         ))}
@@ -151,14 +232,15 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                           const dateObj = new Date(displayDate.getFullYear(), displayDate.getMonth(), day)
                           const weekday = dateObj.getDay()
 
-                          // PAST DATE LOGIC — NO COLOR CHANGE, ONLY DISABLE
+                          // Past date logic
                           const today = new Date()
                           today.setHours(0,0,0,0)
                           const isPast = dateObj < today
 
                           const disabled = offDays.includes(weekday) || isPast
 
-                          const token = `${displayDate.getFullYear()}-${displayDate.getMonth()}-${day}`
+                          // FIXED — Correct token format for EmailJS (+1 month)
+                          const token = `${displayDate.getFullYear()}-${displayDate.getMonth() + 1}-${day}`
                           const isActive = selectedDate === token
 
                           return (
@@ -166,26 +248,14 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                               key={token}
                               disabled={disabled}
                               onClick={() => !disabled && setSelectedDate(token)}
-                              title={
-                                offDays.includes(weekday) ? t('booking.calendar.closed') :
-                                isPast ? t('booking.calendar.past') :
-                                t('booking.calendar.select', { day })
-                              }
                               className={`px-5 py-3 text-sm transition-transform duration-300 font-semibold border-2 rounded-lg
                                 ${
-                                  // Off-day (red)
                                   offDays.includes(weekday)
                                     ? 'bg-red-50 text-red-700 border-red-200 cursor-not-allowed opacity-60'
-
-                                  // Past date — LOOK NORMAL but disabled
                                   : isPast
                                     ? 'bg-white/70 text-slate-800 border border-white/40 cursor-not-allowed'
-                                
-                                  // Selected
                                   : isActive
                                     ? 'bg-teal-600 text-white font-bold shadow-2xl transform -translate-y-1 scale-105'
-
-                                  // Normal available date
                                   : 'bg-white/70 text-slate-800 border border-white/40 shadow-sm hover:-translate-y-3 hover:scale-105 hover:shadow-2xl'
                                 }
                               `}
@@ -262,19 +332,24 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
 
               {/* STEP 3 — DETAILS */}
               {step === 3 && (
-                <form onSubmit={handleSubmit} className="space-y-6">
+                // Important: formRef added for EmailJS sendForm()
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                   <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">{t('booking.detailsTitle')}</h3> {/* 🔁 language switch */}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <input
                       type="text"
+                      name="name" // REQUIRED for EmailJS
                       required
                       placeholder={t('booking.fullName')} /* 🔁 language switch */
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       className="w-full p-4 rounded-2xl border border-white/50 bg-white focus:ring-2 focus:ring-teal-500"
                     />
+
                     <input
                       type="tel"
+                      name="phone" // REQUIRED for EmailJS
                       required
                       placeholder={t('booking.phone')}/* 🔁 language switch */
                       value={form.phone}
@@ -285,12 +360,38 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
 
                   <textarea
                     rows={3}
+                    name="reason" // REQUIRED for EmailJS
                     required
                     placeholder={t('booking.reason')} /* 🔁 language switch */
                     value={form.reason}
                     onChange={(e) => setForm({ ...form, reason: e.target.value })}
                     className="w-full p-4 rounded-2xl border border-white/50 bg-white focus:ring-2 focus:ring-teal-500"
                   />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder={t('booking.email') || 'Email (optional)'} /* 🔁 language switch */
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      className="w-full p-4 rounded-2xl border border-white/50 bg-white focus:ring-2 focus:ring-teal-500"
+                    />
+
+                    <input
+                      type="number"
+                      name="age"
+                      placeholder={t('booking.age') || 'Age'} /* 🔁 language switch */
+                      value={form.age}
+                      onChange={(e) => setForm({ ...form, age: e.target.value })}
+                      className="w-full p-4 rounded-2xl border border-white/50 bg-white focus:ring-2 focus:ring-teal-500"
+                    />
+                  </div>
+
+                  {/* Hidden fields required by EmailJS sendForm() */}
+                  <input type="hidden" name="appointment_date" />
+                  <input type="hidden" name="appointment_time" />
+                  <input type="hidden" name="doctor" />
 
                   <div className="flex justify-between pt-6">
                     <button
