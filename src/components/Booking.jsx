@@ -82,8 +82,8 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
     try {
       // Send booking email (to doctor / clinic)
       await emailjs.sendForm(
-        'service_qhjc81w',     // ✅ Your service ID
-        'template_dtcsl71',    // ✅ Your template ID
+        'service_53xthn6',     // ✅ Your service ID
+        'template_ziljfcj',    // ✅ Your template ID
         formRef.current,       // ✅ MUST be the form element
         '168fienQygeV1wIck'    // ✅ Your public key
       )
@@ -92,8 +92,8 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
       if (form.email && form.email.trim()) {
         try {
           await emailjs.send(
-            'service_qhjc81w',
-            'template_auto_reply_dummy', // <-- dummy, replace with real template id later
+            'service_53xthn6',
+            'template_q08oude', // <-- dummy, replace with real template id later
             {
               name: form.name,
               to_email: form.email,
