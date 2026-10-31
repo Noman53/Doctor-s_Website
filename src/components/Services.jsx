@@ -19,7 +19,7 @@ const Services = () => {
   ]
 
   return (
-    <section id="services" className="site-bg relative" aria-labelledby="services-heading">
+    <section id="services" className="site-bg relative scroll-mt-32" aria-labelledby="services-heading">
       {/* teal blur gradient behind content — subtle, consistent with site palette */}
       <div className="absolute inset-0 bg-linear-to-br from-teal-50/60 via-teal-100/35 to-teal-200/20 backdrop-blur-md pointer-events-none z-0" />
       <div className="section scroll-mt-20 py-10 md:py-16 relative z-10" aria-labelledby="services-heading">
@@ -28,10 +28,10 @@ const Services = () => {
             <span className="text-teal-700 font-bold uppercase tracking-wider text-sm bg-white/60 px-4 py-1 rounded-full border border-white/50">
               {t('services.badge')} {/* 🔁 language switch */}
             </span>
-            <h2 id="services-heading" className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 mb-6">
+            <h2 id="services-heading" className="fluid-heading font-extrabold text-slate-900 mt-4 mb-6">
               {t('services.title')} {/* 🔁 language switch */}
             </h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
+            <p className="fluid-copy text-slate-600">
               {t('services.desc')} {/* 🔁 language switch */}
             </p>
           </div>
@@ -45,8 +45,8 @@ const Services = () => {
                 <div className="w-16 h-16 bg-white/80 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-600 transition-colors duration-500 shadow-sm" aria-hidden="true">
                   {React.cloneElement(s.icon, { className: "h-8 w-8 text-teal-600 group-hover:text-white transition-colors duration-300" })}
                 </div>
-                <h3 className="text-2xl font-bold text-gradient mb-4">{s.title}</h3> {/* 🔁 language switch */}
-                <p className="text-slate-600 mb-6 leading-relaxed">{s.desc}</p> {/* 🔁 language switch */}
+                <h3 className="fluid-subheading font-bold text-gradient mb-4">{s.title}</h3> {/* 🔁 language switch */}
+                <p className="fluid-copy text-slate-600 mb-6">{s.desc}</p> {/* 🔁 language switch */}
                 {/* NOTE: "View Details" removed — keep card concise. Add CTA later if needed. */}
                </div>
              ))}

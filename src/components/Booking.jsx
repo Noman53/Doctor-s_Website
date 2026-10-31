@@ -95,8 +95,8 @@ const Booking = () => {
             <span className="text-teal-700 font-bold uppercase tracking-wider text-xs bg-white/50 px-3 py-1 rounded-full">
               {t('booking.badge')} {/* 🔁 language switch */}
             </span>
-            <h2 className="text-3xl font-extrabold text-slate-900 mt-4">{t('booking.title')}</h2> {/* 🔁 language switch */}
-            <p className="text-slate-600 mt-4">{t('booking.desc')}</p> {/* 🔁 language switch */}
+            <h2 className="fluid-heading font-extrabold text-slate-900 mt-4">{t('booking.title')}</h2> {/* 🔁 language switch */}
+            <p className="fluid-copy text-slate-600 mt-4">{t('booking.desc')}</p> {/* 🔁 language switch */}
           </div>
 
           <div className="glass-panel rounded-4xl shadow-2xl border border-white/60 overflow-hidden">
@@ -142,7 +142,7 @@ const Booking = () => {
                       <ChevronLeft className="h-5 w-5" aria-hidden="true" />
                     </button>
 
-                    <h3 className="text-base sm:text-xl font-bold text-slate-900 mb-0 text-center flex-1 min-w-0">
+                    <h3 className="text-[clamp(0.9rem,2.5vw,1.25rem)] font-bold text-slate-900 mb-0 text-center flex-1 min-w-0">
                       {displayDate.toLocaleString(i18n.language === 'bn' ? 'bn-BD' : 'en-US', { month: 'long', year: 'numeric' })}
                     </h3>
 
@@ -247,7 +247,7 @@ const Booking = () => {
               {/* STEP 2 — TIME */}
               {step === 2 && (
                 <>
-                  <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">{t('booking.timeTitle')}</h3> {/* 🔁 language switch */}
+                  <h3 className="fluid-subheading font-bold text-slate-900 mb-6 text-center">{t('booking.timeTitle')}</h3> {/* 🔁 language switch */}
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {timeSlots.map((tItem) => (
@@ -296,7 +296,7 @@ const Booking = () => {
               {step === 3 && (
                 // Important: formRef added for EmailJS sendForm()
                 <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-6 text-center">{t('booking.detailsTitle')}</h3> {/* 🔁 language switch */}
+                  <h3 className="fluid-subheading font-bold text-slate-900 mb-6 text-center">{t('booking.detailsTitle')}</h3> {/* 🔁 language switch */}
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <input

@@ -51,6 +51,13 @@ const Navbar = () => {
     document.documentElement.lang = next
   }
 
+  const navItems = [
+    { label: t('navbar.home'), href: '#home' },
+    { label: t('navbar.about'), href: '#about' },
+    { label: t('navbar.services'), href: '#services' },
+    { label: t('navbar.chamber'), href: '#locations' }
+  ]
+
   return (
     <header>
       <nav
@@ -63,41 +70,36 @@ const Navbar = () => {
         aria-label="Primary"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className={`flex justify-between items-center transition-all duration-300 ${shrunk ? 'h-16' : 'h-20'}`}>
+          <div className={`flex justify-between items-center transition-all duration-300 ${shrunk ? 'h-16' : 'h-20 md:h-16 xl:h-20'}`}>
             {/* Logo */}
-            <a href="#home" onClick={() => setOpen(false)} className="flex items-center group" aria-label="Go to home">
-              <div className="bg-teal-600/90 p-2 rounded-lg shadow-lg group-hover:bg-teal-700 transition-colors">
+            <a href="#home" onClick={() => setOpen(false)} className="flex min-w-0 flex-1 items-center group" aria-label="Go to home">
+              <div className="shrink-0 bg-teal-600/90 p-2 rounded-lg shadow-lg group-hover:bg-teal-700 transition-colors">
                 <Activity className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
-              <div className="ml-3">
-                <span className="text-lg font-bold text-slate-900 tracking-tight group-hover:text-teal-700 transition-colors">
+              <div className="ml-3 min-w-0">
+                <span className="block text-base sm:text-lg leading-tight font-bold text-slate-900 tracking-tight group-hover:text-teal-700 transition-colors">
                   {t('identity.name')}
                 </span>
-                <p className="text-[10px] text-teal-800 font-bold tracking-widest uppercase mt-1">
+                <p className="mt-1 text-[9px] sm:text-[10px] leading-tight text-teal-800 font-bold tracking-[0.12em] uppercase whitespace-normal">
                   {t('identity.subtitle')}
                 </p>
               </div>
             </a>
 
             {/* Desktop Nav */}
-            <div className="hidden md:flex items-center space-x-2">
-              {[
-                { label: t('navbar.home'), href: '#home' },
-                { label: t('navbar.about'), href: '#about' },
-                { label: t('navbar.services'), href: '#services' },
-                { label: t('navbar.chamber'), href: '#locations' }
-              ].map((item, i) => (
+            <div className="hidden xl:flex shrink-0 items-center space-x-2">
+              {navItems.map((item) => (
                 <a
-                  key={i}
+                  key={item.href}
                   href={item.href}
-                  className="px-5 py-2 text-sm font-medium text-slate-800 hover:text-teal-700 rounded-full hover:bg-white/40 transition-colors"
+                  className="whitespace-nowrap px-4 py-2 text-sm font-medium text-slate-800 hover:text-teal-700 rounded-full hover:bg-white/40 transition-colors"
                 >
                   {item.label}
                 </a>
               ))}
               <a
                 href="#booking"
-                className="ml-4 bg-teal-600 hover:bg-teal-700 text-white px-6 py-2.5 rounded-full text-sm font-medium transition shadow-lg shadow-teal-600/20 transform hover:-translate-y-0.5"
+                className="ml-2 whitespace-nowrap bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-full text-sm font-medium transition shadow-lg shadow-teal-600/20 transform hover:-translate-y-0.5"
               >
                 {t('navbar.booking')}
               </a>
@@ -105,7 +107,7 @@ const Navbar = () => {
               {/* Language Switch Button */}
               <button
                 onClick={toggleLanguage}
-                className="ml-4 px-5 py-2 rounded-full bg-white/60 text-slate-800 border border-white/50 hover:bg-white cursor-pointer transition font-semibold shadow-sm hover:shadow-md"
+                className="ml-2 whitespace-nowrap px-4 py-2 rounded-full bg-white/60 text-slate-800 border border-white/50 hover:bg-white cursor-pointer transition font-semibold shadow-sm hover:shadow-md"
               >
                 {isBn ? 'English' : 'বাংলা'} {/* 🔁 Bangla translation toggle */}
               </button>
@@ -123,6 +125,29 @@ const Navbar = () => {
               <Menu className="h-6 w-6" />
             </button>
           </div>
+          <nav className="hidden md:flex xl:hidden items-center justify-between gap-1 pb-2" aria-label="Tablet navigation">
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="whitespace-nowrap px-2 py-2 text-[clamp(0.75rem,1.7vw,0.875rem)] font-medium text-slate-800 hover:text-teal-700 rounded-full hover:bg-white/40 transition-colors"
+              >
+                {item.label}
+              </a>
+            ))}
+            <a
+              href="#booking"
+              className="whitespace-nowrap rounded-full bg-teal-600 px-3 py-2 text-[clamp(0.75rem,1.7vw,0.875rem)] font-semibold text-white shadow-md transition hover:bg-teal-700"
+            >
+              {t('navbar.booking')}
+            </a>
+            <button
+              onClick={toggleLanguage}
+              className="whitespace-nowrap rounded-full border border-white/50 bg-white/60 px-3 py-2 text-[clamp(0.75rem,1.7vw,0.875rem)] font-semibold text-slate-800 transition hover:bg-white"
+            >
+              {isBn ? 'English' : 'বাংলা'}
+            </button>
+          </nav>
         </div>
 
         {/* Mobile Menu */}

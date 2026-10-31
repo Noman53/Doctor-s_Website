@@ -16,6 +16,18 @@
 
   /* lighter overlay for panels */
   --overlay-light: rgba(255,255,255,0.12);
+  --anchor-offset: 5rem;
+}
+
+html {
+  scroll-padding-top: var(--anchor-offset);
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  :root {
+    --anchor-offset: 7rem;
+  }
 }
 
 /* use one canonical site background (use on hero / sections / footer wrapper) */
@@ -38,6 +50,28 @@
 .section {
   padding: clamp(2rem, 3.5vw, 5rem) 0;
   scroll-margin-top: 5rem;
+}
+
+.fluid-heading {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.fluid-subheading {
+  font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+.fluid-copy {
+  font-size: clamp(1rem, 0.35vw + 0.95rem, 1.125rem);
+  line-height: 1.7;
+}
+
+.prose p {
+  font-size: clamp(1rem, 0.35vw + 0.95rem, 1.125rem);
+  line-height: 1.7;
 }
 .section + .section {
   padding-top: clamp(1rem, 2.5vw, 3rem);

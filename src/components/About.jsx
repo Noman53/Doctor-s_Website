@@ -7,7 +7,7 @@ const About = () => {
   const { t } = useTranslation() // 🔁 language switch
 
   return (
-    <section className="site-bg relative" id="about">
+    <section className="site-bg relative scroll-mt-32" id="about">
       <div className="absolute inset-0 section-overlay-light pointer-events-none z-0" />
       <div className="section py-10 md:py-16 relative z-10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -18,16 +18,16 @@ const About = () => {
               <span className="text-teal-700 font-bold uppercase tracking-wider text-xs bg-white/50 px-3 py-1 rounded-full border border-teal-100">
                 {t('about.meet')} {/* 🔁 language switch */}
               </span>
-              <h2 id="about-heading" className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-6 mt-4">
+              <h2 id="about-heading" className="fluid-heading font-extrabold text-slate-900 mb-6 mt-4">
                 {t('about.name')} {/* 🔁 language switch */}
               </h2>
 
               <div className="mb-8 glass-card p-5 rounded-2xl shadow-sm">
-                <p className="text-lg text-teal-800 font-bold mb-1">{t('about.designation')}</p> {/* 🔁 language switch */}
-                <p className="text-slate-600 font-medium">{t('about.institute')}</p> {/* 🔁 language switch */}
+                <p className="fluid-subheading text-teal-800 font-bold mb-1">{t('about.designation')}</p> {/* 🔁 language switch */}
+                <p className="fluid-copy text-slate-600 font-medium">{t('about.institute')}</p> {/* 🔁 language switch */}
               </div>
 
-              <div className="prose prose-lg text-slate-600 mb-10 leading-relaxed">
+              <div className="prose text-slate-600 mb-10">
                 <p><strong>{t('about.name')}</strong> {t('about.bio1')}</p> {/* 🔁 language switch */}
                 <p>{t('about.bio2')}</p> {/* 🔁 language switch */}
               </div>

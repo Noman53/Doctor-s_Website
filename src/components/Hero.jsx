@@ -26,14 +26,14 @@ const Hero = () => {
             
             {/* Text Content */}
             <div className="lg:col-span-6 text-center lg:text-left pt-4 lg:pt-0">
-              <div className="inline-flex items-center px-4 py-2 rounded-full glass-panel mb-6 mt-6 md:mt-10 shadow-sm border border-white/60 relative z-70">
-                <span className="w-2 h-2 rounded-full bg-teal-600 mr-2 animate-pulse"></span>
-                <span className="text-xs font-bold text-teal-800 uppercase tracking-wide">
+              <div className="inline-flex max-w-full items-center gap-x-2 px-3 sm:px-4 py-2 rounded-2xl sm:rounded-full glass-panel mb-6 mt-6 md:mt-10 shadow-sm border border-white/60 relative z-10">
+                <span className="w-2 h-2 shrink-0 rounded-full bg-teal-600 animate-pulse"></span>
+                <span className="min-w-0 text-[clamp(0.625rem,3.1vw,0.75rem)] leading-snug font-bold text-teal-800 uppercase tracking-wide whitespace-normal break-words">
                   {t('hero.badge')} {/* 🔁 language switch */}
                 </span>
               </div>
               
-              <h1 id="hero-heading" className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 mb-5 drop-shadow-sm leading-tight">
+              <h1 id="hero-heading" className="text-[clamp(2rem,8.2vw,3.75rem)] font-extrabold text-slate-900 mb-5 drop-shadow-sm leading-[1.12]">
                 {t('hero.headlineLine1')} <br />
                 <span className="text-gradient">{t('hero.headlineLine2')}</span> {/* 🔁 language switch */}
               </h1>
@@ -84,8 +84,8 @@ const Hero = () => {
               <div className="relative z-20 mt-4 mx-auto w-[calc(100%-1rem)] max-w-[20rem] glass-panel p-4 rounded-2xl shadow-lg flex items-center justify-between gap-3 border border-white/60">
                 <div>
                   <p className="text-sm font-bold text-slate-900">{t('identity.name')}</p> {/* 🔁 language switch */}
-                  <p className="text-xs text-teal-700 font-semibold">{t('hero.badge')}</p> {/* 🔁 language switch */}
-                  <p className="text-xs text-teal-700 font-semibold">{t('about.institute')}</p>
+                  <p className="text-[clamp(0.8125rem,1.3vw,0.875rem)] leading-snug text-teal-700 font-semibold">{t('hero.badge')}</p> {/* 🔁 language switch */}
+                  <p className="text-[clamp(0.8125rem,1.3vw,0.875rem)] leading-snug text-teal-700 font-semibold">{t('about.institute')}</p>
                 </div>
                 <div className="h-12 w-12 bg-teal-600 rounded-full flex items-center justify-center text-white shadow-lg" aria-hidden="true">
                   <Stethoscope className="h-6 w-6" />

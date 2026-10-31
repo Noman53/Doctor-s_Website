@@ -22,11 +22,11 @@ const Locations = () => {
             </span>
             <h2
               id="locations-heading"
-              className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 leading-tight"
+              className="fluid-heading font-extrabold text-slate-900 mb-4"
             >
               {t('locations.title')} {/* 🔁 language switch */}
             </h2>
-            <p className="text-lg text-slate-600 leading-relaxed">
+            <p className="fluid-copy text-slate-600">
               {t('locations.descLead')}{" "}
               <span className="text-teal-700 font-semibold">
                 {t('locations.descTail')} {/* 🔁 language switch */}
@@ -39,24 +39,24 @@ const Locations = () => {
             
             {/* Chamber Details */}
             <div className="glass-panel rounded-3xl p-10 shadow-xl flex flex-col justify-center">
-              <h3 className="text-2xl font-bold text-slate-900 mb-4 flex items-center">
+              <h3 className="fluid-subheading font-bold text-slate-900 mb-4 flex items-center">
                 <MapPin className="h-6 w-6 text-teal-600 mr-2" aria-hidden="true" />
                 {t('locations.hospital')} {/* 🔁 language switch */}
               </h3>
-              <p className="text-slate-600 mb-6 leading-relaxed">
+              <p className="fluid-copy text-slate-600 mb-6">
                 {t('locations.address')} {/* 🔁 language switch */}
               </p>
               
               <div className="space-y-4 mb-6">
                 <div className="flex items-center text-slate-700">
                   <Clock className="h-5 w-5 text-teal-600 mr-3" aria-hidden="true" />
-                  <span className="font-medium">
+                  <span className="fluid-copy font-medium">
                     {t('locations.hours')} {/* 🔁 language switch */}
                   </span>
                 </div>
                 <div className="flex items-center text-slate-700">
                   <Phone className="h-5 w-5 text-teal-600 mr-3" aria-hidden="true" />
-                  <a className="font-medium hover:text-teal-700" href="tel:+8801711946412">{t('locations.phone')}</a> {/* 🔁 language switch */}
+                  <a className="fluid-copy font-medium hover:text-teal-700" href="tel:+8801711946412">{t('locations.phone')}</a> {/* 🔁 language switch */}
                 </div>
               </div>
 
