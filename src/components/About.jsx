@@ -1,19 +1,15 @@
 // src/components/About.jsx
 import React from 'react'
-import doctorImg from '../assets/Dr-Syed-Md-Muhsin.jpg'
 import { GraduationCap, CheckCircle2, ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next' // 🔁 language switch
 
 const About = () => {
   const { t } = useTranslation() // 🔁 language switch
 
-  const structuredData = { /* keep as-is */ }
-
   return (
     <section className="site-bg relative" id="about">
       <div className="absolute inset-0 section-overlay-light pointer-events-none z-0" />
       <div className="section py-10 md:py-16 relative z-10">
-        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
             
@@ -22,9 +18,9 @@ const About = () => {
               <span className="text-teal-700 font-bold uppercase tracking-wider text-xs bg-white/50 px-3 py-1 rounded-full border border-teal-100">
                 {t('about.meet')} {/* 🔁 language switch */}
               </span>
-              <h1 id="about-heading" className="text-4xl font-extrabold text-slate-900 mb-6 mt-4">
+              <h2 id="about-heading" className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-6 mt-4">
                 {t('about.name')} {/* 🔁 language switch */}
-              </h1>
+              </h2>
 
               <div className="mb-8 glass-card p-5 rounded-2xl shadow-sm">
                 <p className="text-lg text-teal-800 font-bold mb-1">{t('about.designation')}</p> {/* 🔁 language switch */}
@@ -58,19 +54,17 @@ const About = () => {
 
             {/* Image */}
             <div className="order-1 lg:order-2 relative mt-8 lg:mt-0">
-              <div className="aspect-4/5 rounded-3xl overflow-hidden shadow-2xl relative z-10 group max-w-sm mx-auto border-8 border-white/40">
+              <div className="relative z-10 mx-auto w-full max-w-[20rem] aspect-[20/27] overflow-hidden rounded-[2rem] border-[6px] border-white bg-white shadow-[0_24px_70px_rgba(15,76,75,0.18)] transition-transform duration-500 hover:-translate-y-1">
                 <img
-                  className="object-cover w-full h-full transition-transform duration-700 ease-in-out group-hover:scale-105"
-                  src={doctorImg}
+                  className="object-contain w-full h-full"
+                  src="/dr-muhsin.jpg"
                   alt={t('identity.name')} /* 🔁 language switch */
                   loading="lazy"
-                />
-                <div
-                  className="absolute inset-0 bg-linear-to-t from-teal-900/30 to-transparent z-20 pointer-events-none"
-                  aria-hidden="true"
+                  width="300"
+                  height="405"
                 />
               </div>
-              <div className="absolute top-1/2 -right-12 -translate-y-1/2 w-full h-[90%] bg-white/30 rounded-4xl -z-10 blur-2xl"></div>
+              <div className="absolute inset-3 rounded-[2.4rem] border border-teal-700/15 -rotate-3 -z-10" aria-hidden="true" />
             </div>
           </div>
         </div>

@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Phone, MessageCircle, MessageSquare } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 const FloatingButton = () => {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const containerRef = useRef(null)
 
@@ -31,12 +33,14 @@ const FloatingButton = () => {
       >
         <a
           href="tel:+8801711946412"
+          aria-label={t('contact.call')}
           className="bg-teal-600 text-white p-3 rounded-full shadow-md hover:bg-teal-700 transition transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer"
         >
           <Phone className="h-5 w-5" />
         </a>
         <a
           href="https://wa.me/8801711946412"
+          aria-label={t('contact.whatsapp')}
           target="_blank"
           rel="noopener noreferrer"
           className="bg-green-500 text-white p-3 rounded-full shadow-md hover:bg-green-600 transition transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
@@ -48,6 +52,7 @@ const FloatingButton = () => {
       {/* Main communication button */}
       <button
         onClick={() => setOpen((v) => !v)}
+        aria-label={t(open ? 'contact.close' : 'contact.open')}
         aria-expanded={open}
         className={`flex items-center justify-center p-4 rounded-full shadow-xl transition focus:outline-none focus:ring-2 cursor-pointer
           ${open ? 'bg-teal-700 text-white' : 'bg-teal-600 text-white hover:bg-teal-700'}`}

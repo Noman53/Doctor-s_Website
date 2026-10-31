@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react' // Added useRef
-import { Check, ArrowRight, Home, Moon } from 'lucide-react'
-import emailjs from '@emailjs/browser' // npm i @emailjs/browser
+import React, { useState, useRef } from 'react'
+import { Check, ArrowRight, ChevronLeft, ChevronRight, Home, Moon } from 'lucide-react'
+import emailjs from '@emailjs/browser'
 import { useTranslation } from 'react-i18next' // 🔁 language switch
 
-const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has been received. Our assistant will call you for final confirmation.' }) => {
-  const { t } = useTranslation() // 🔁 language switch
+const Booking = () => {
+  const { t, i18n } = useTranslation() // 🔁 language switch
   const [step, setStep] = useState(1)
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedTime, setSelectedTime] = useState(null)
@@ -32,24 +32,11 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
 
   const labelForStep = t('booking.steps', { returnObjects: true }) // 🔁 language switch
 
-  /*  
-  ================================================================
-      ✅ FIXED EMAILJS — Modern version using sendForm()
-      - Uses formRef
-      - Sends all fields correctly
-      - Date ✓ Time ✓ Name ✓ Phone ✓ Reason ✓
-      - No environment variables needed
-      - + Added: optional email & age, auto-reply, sheets webhook
-  ================================================================
-  */
-
-  // -------------------------
-  // Helper: Bangladesh phone validation
-  // Accepts: 01XXXXXXXXX, 8801XXXXXXXXX, +8801XXXXXXXXX
-  // -------------------------
   const isValidBangladeshPhone = (phone) => {
     if (!phone) return false
-    const cleaned = phone.replace(/\s+/g, '')
+    const bengaliDigits = '০১২৩৪৫৬৭৮৯'
+    const normalizedDigits = phone.replace(/[০-৯]/g, (digit) => bengaliDigits.indexOf(digit))
+    const cleaned = normalizedDigits.replace(/[\s()-]/g, '')
     return /^(?:\+?88)?01[0-9]{9}$/.test(cleaned)
   }
 
@@ -67,70 +54,27 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
 
     // FIX DATE: token is "YYYY-M-D" with month 1-based — convert to JS Date with (m-1)
     const [y, m, d] = (selectedDate || '').split('-').map(Number)
-    const formattedDate = selectedDate ? new Date(y, m - 1, d).toLocaleDateString() : ''
+    const formattedDate = selectedDate
+      ? new Date(y, m - 1, d).toLocaleDateString(i18n.language === 'bn' ? 'bn-BD' : 'en-US')
+      : ''
 
-    // Fill hidden inputs (sendForm reads directly from DOM)
     if (formRef.current) {
       formRef.current.appointment_date.value = formattedDate
       formRef.current.appointment_time.value = selectedTime || ''
       formRef.current.doctor.value = 'Dr. Syed Md. Muhsin'
-      // optional fields
       if (formRef.current.email) formRef.current.email.value = form.email || ''
       if (formRef.current.age) formRef.current.age.value = form.age || ''
     }
 
     try {
-      // Send booking email (to doctor / clinic)
       await emailjs.sendForm(
-        'service_53xthn6',     // ✅ Your service ID
-        'template_ziljfcj',    // ✅ Your template ID
-        formRef.current,       // ✅ MUST be the form element
-        '168fienQygeV1wIck'    // ✅ Your public key
+        'service_53xthn6',
+        'template_ziljfcj',
+        formRef.current,
+        '168fienQygeV1wIck'
       )
 
-      // Auto-reply only if patient provided email (non-blocking)
-      if (form.email && form.email.trim()) {
-        try {
-          await emailjs.send(
-            'service_53xthn6',
-            'template_q08oude', // <-- dummy, replace with real template id later
-            {
-              name: form.name,
-              to_email: form.email,
-              appointment_date: formattedDate,
-              appointment_time: selectedTime || '',
-              doctor: 'Dr. Syed Md. Muhsin'
-            },
-            '168fienQygeV1wIck'
-          )
-        } catch (autoErr) {
-          // auto-reply failed — log but continue
-          console.warn('Auto-reply failed:', autoErr)
-        }
-      }
-
-      // Send to Google Sheets via webhook (dummy URL for now; replace with your Apps Script URL)
-      try {
-        await fetch('https://example.com/google_sheets_webhook', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: form.name,
-            phone: form.phone,
-            reason: form.reason,
-            email: form.email || '',
-            age: form.age || '',
-            appointment_date: formattedDate,
-            appointment_time: selectedTime || '',
-            doctor: 'Dr. Syed Md. Muhsin',
-            timestamp: new Date().toISOString()
-          })
-        })
-      } catch (sheetErr) {
-        console.warn('Google Sheets webhook error (non-fatal):', sheetErr)
-      }
-
-      setStep(4) // Success page
+      setStep(4)
     } catch (err) {
       console.error('EmailJS error', err)
       alert(t('booking.error')) // 🔁 language switch
@@ -158,7 +102,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
           <div className="glass-panel rounded-4xl shadow-2xl border border-white/60 overflow-hidden">
 
             {/* Stepper */}
-            <div className="bg-white/40 px-8 py-6 border-b border-white/30 backdrop-blur-sm flex justify-center gap-8">
+            <div className="bg-white/40 px-3 sm:px-8 py-6 border-b border-white/30 backdrop-blur-sm flex justify-center gap-4 sm:gap-8">
               {labelForStep.map((label, idx) => {
                 const n = idx + 1
                 return (
@@ -177,49 +121,60 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
             </div>
 
             {/* Body */}
-            <div className="p-8 sm:p-12 min-h-[420px]">
+            <div className="p-4 sm:p-8 lg:p-12 min-h-[420px]">
 
               {/* STEP 1 — DATE*/}
               {step === 1 && (
                 <>
-                  <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between gap-2 mb-6">
                     <button
-                      onClick={() => setMonthOffset((m) => Math.max(0, m - 1))}
+                      type="button"
+                      aria-label={t('booking.prevMonth')}
+                      onClick={() => {
+                        setMonthOffset((m) => Math.max(0, m - 1))
+                        setSelectedDate(null)
+                      }}
                       disabled={monthOffset === 0}
-                      className={`px-4 py-2 rounded-lg font-bold transition ${
+                      className={`p-2 rounded-lg font-bold transition ${
                         monthOffset === 0 ? 'bg-slate-200 text-slate-500 cursor-not-allowed' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
                       }`}
                     >
-                      ← {t('booking.prevMonth')} {/* 🔁 language switch */}
+                      <ChevronLeft className="h-5 w-5" aria-hidden="true" />
                     </button>
 
-                    <h3 className="text-xl font-bold text-slate-900 mb-0 text-center flex-1 mx-6">
-                      {displayDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                    <h3 className="text-base sm:text-xl font-bold text-slate-900 mb-0 text-center flex-1 min-w-0">
+                      {displayDate.toLocaleString(i18n.language === 'bn' ? 'bn-BD' : 'en-US', { month: 'long', year: 'numeric' })}
                     </h3>
 
                     <button
-                      onClick={() => setMonthOffset((m) => m + 1)}
-                      className="px-4 py-2 rounded-lg bg-teal-600 text-white font-bold hover:bg-teal-700 transition"
+                      type="button"
+                      aria-label={t('booking.nextMonth')}
+                      onClick={() => {
+                        setMonthOffset((m) => m + 1)
+                        setSelectedDate(null)
+                      }}
+                      className="p-2 rounded-lg bg-teal-600 text-white font-bold hover:bg-teal-700 transition"
                     >
-                      {t('booking.nextMonth')} → {/* 🔁 language switch */}
+                      <ChevronRight className="h-5 w-5" aria-hidden="true" />
                     </button>
                   </div>
 
                   {/* Week labels */}
                   <div className="mx-auto w-full max-w-xl px-1 mb-1">
-                    <div className="grid grid-cols-7 gap-3">
+                    <div className="grid grid-cols-7 gap-1 sm:gap-2">
                     {t('booking.weekdays', { returnObjects: true }).map((d, i) => ( /* 🔁 language switch */
                       <div
                       key={i}
-                      className="flex items-center justify-center text-[12px] font-bold text-slate-800 uppercase h-8 tracking-wide">{d}</div>
+                      aria-label={d}
+                      className="flex items-center justify-center text-[10px] sm:text-xs font-bold text-slate-800 uppercase h-8 tracking-wide">{d}</div>
                       ))}
                       </div>
                       </div>
 
                   {/* Calendar */}
                   <div className="mx-auto w-full max-w-xl p-1 rounded-3xl bg-linear-to-br from-teal-200/35 via-teal-100/25 to-white/20 shadow-sm">
-                    <div className="rounded-2xl bg-white/40 backdrop-blur-md p-3 md:p-4 border border-white/30">
-                      <div className="grid grid-cols-7 gap-3 text-center">
+                    <div className="rounded-2xl bg-white/40 backdrop-blur-md p-2 sm:p-4 border border-white/30">
+                      <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center">
 
                         {/* Offset empty cells */}
                         {Array.from({ length: firstWeekday }).map((_, i) => (
@@ -246,9 +201,12 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                           return (
                             <button
                               key={token}
+                              type="button"
                               disabled={disabled}
                               onClick={() => !disabled && setSelectedDate(token)}
-                              className={`px-5 py-3 text-sm transition-transform duration-300 font-semibold border-2 rounded-lg
+                              aria-label={dateObj.toLocaleDateString(i18n.language === 'bn' ? 'bn-BD' : 'en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+                              aria-pressed={isActive}
+                              className={`w-full aspect-square min-w-0 px-0 py-1 text-xs sm:text-sm transition-transform duration-300 font-semibold border-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600
                                 ${
                                   offDays.includes(weekday)
                                     ? 'bg-red-50 text-red-700 border-red-200 cursor-not-allowed opacity-60'
@@ -259,7 +217,6 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                                   : 'bg-white/70 text-slate-800 border border-white/40 shadow-sm hover:-translate-y-3 hover:scale-105 hover:shadow-2xl'
                                 }
                               `}
-                              style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
                             >
                               {day}
                             </button>
@@ -272,6 +229,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
 
                   <div className="flex justify-end pt-8">
                     <button
+                      type="button"
                       onClick={() => setStep(2)}
                       disabled={!selectedDate}
                       className={`px-8 py-4 rounded-full font-bold flex items-center transition ${
@@ -294,8 +252,10 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {timeSlots.map((tItem) => (
                       <button
+                        type="button"
                         key={tItem}
                         onClick={() => setSelectedTime(tItem)}
+                        aria-pressed={selectedTime === tItem}
                         className={`p-4 rounded-xl text-sm font-bold transition flex items-center justify-center ${
                           selectedTime === tItem
                             ? 'bg-teal-600 text-white shadow-lg'
@@ -309,6 +269,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
 
                   <div className="flex justify-between pt-8">
                     <button
+                      type="button"
                       onClick={() => setStep(1)}
                       className="text-slate-500 hover:text-slate-800 font-bold px-6 py-3 rounded-full hover:bg-white/50 transition"
                     >
@@ -316,6 +277,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     </button>
 
                     <button
+                      type="button"
                       onClick={() => setStep(3)}
                       disabled={!selectedTime}
                       className={`px-8 py-4 rounded-full font-bold flex items-center transition ${
@@ -341,6 +303,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       type="text"
                       name="name" // REQUIRED for EmailJS
                       required
+                      aria-label={t('booking.fullName')}
                       placeholder={t('booking.fullName')} /* 🔁 language switch */
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -351,6 +314,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       type="tel"
                       name="phone" // REQUIRED for EmailJS
                       required
+                      aria-label={t('booking.phone')}
                       placeholder={t('booking.phone')}/* 🔁 language switch */
                       value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
@@ -362,6 +326,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     rows={3}
                     name="reason" // REQUIRED for EmailJS
                     required
+                    aria-label={t('booking.reason')}
                     placeholder={t('booking.reason')} /* 🔁 language switch */
                     value={form.reason}
                     onChange={(e) => setForm({ ...form, reason: e.target.value })}
@@ -372,6 +337,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     <input
                       type="email"
                       name="email"
+                      aria-label={t('booking.email')}
                       placeholder={t('booking.email') || 'Email (optional)'} /* 🔁 language switch */
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -381,6 +347,9 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                     <input
                       type="number"
                       name="age"
+                      min="0"
+                      max="120"
+                      aria-label={t('booking.age')}
                       placeholder={t('booking.age') || 'Age'} /* 🔁 language switch */
                       value={form.age}
                       onChange={(e) => setForm({ ...form, age: e.target.value })}
@@ -424,7 +393,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                   <h3 className="text-3xl font-extrabold text-slate-900 mb-4">{t('booking.successTitle')}</h3> {/* 🔁 language switch */}
 
                   <p className="text-slate-600 text-lg max-w-md mx-auto mb-10 leading-relaxed">
-                    {thankYouMessage || t('booking.successDesc')} {/* 🔁 language switch */}{' '}
+                    {t('booking.successDesc')}{' '}
                     <span className="font-bold text-slate-800">+880 1711-946412</span>
                   </p>
 
@@ -434,7 +403,7 @@ const Booking = ({ thankYouMessage = 'Thank you. Your appointment request has be
                       setStep(1)
                       setSelectedDate(null)
                       setSelectedTime(null)
-                      setForm({ name: '', phone: '', reason: '' })
+                      setForm({ name: '', phone: '', reason: '', email: '', age: '' })
                       setMonthOffset(0)
                     }}
                     className="inline-flex items-center text-teal-700 font-bold hover:text-teal-900 hover:underline transition"

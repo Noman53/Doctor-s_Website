@@ -73,6 +73,8 @@
     "detailsTitle": "Patient Details",
     "fullName": "Full Name",
     "phone": "Phone Number",
+    "invalidPhone": "Please enter a valid Bangladeshi mobile number, such as 017XXXXXXXX.",
+    "error": "We couldn't send your appointment request. Please try again or call +880 1711-946412.",
     "reason": "Reason for Visit",
     "email": "Email (optional)",
     "age": "Age",
@@ -92,5 +94,11 @@
     "hospitalAddress": "Surgiscope Hospital, Unit 2\nKatalgonj, Chawkbazar, Chattogram",
     "phone": "+880 1711-946412",
     "rights": "All rights reserved."
+  },
+  "contact": {
+    "open": "Open contact options",
+    "close": "Close contact options",
+    "call": "Call the clinic",
+    "whatsapp": "Contact the clinic on WhatsApp"
   }
 }

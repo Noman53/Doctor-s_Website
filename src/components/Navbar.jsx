@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Activity, Menu } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 const Navbar = () => {
   const [open, setOpen] = useState(false)
   const [shrunk, setShrunk] = useState(false)
+  const navRef = useRef(null)
+  const menuButtonRef = useRef(null)
   const { t, i18n } = useTranslation()
   const isBn = i18n.language === 'bn'
 
@@ -13,6 +15,34 @@ const Navbar = () => {
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useEffect(() => {
+    if (!open) return undefined
+
+    const closeOnOutsidePointer = (event) => {
+      if (!navRef.current?.contains(event.target)) setOpen(false)
+    }
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') {
+        setOpen(false)
+        menuButtonRef.current?.focus()
+      }
+    }
+    const closeOnDesktopResize = (event) => {
+      if (event.matches) setOpen(false)
+    }
+    const desktopQuery = window.matchMedia('(min-width: 768px)')
+
+    document.addEventListener('pointerdown', closeOnOutsidePointer)
+    document.addEventListener('keydown', closeOnEscape)
+    desktopQuery.addEventListener('change', closeOnDesktopResize)
+
+    return () => {
+      document.removeEventListener('pointerdown', closeOnOutsidePointer)
+      document.removeEventListener('keydown', closeOnEscape)
+      desktopQuery.removeEventListener('change', closeOnDesktopResize)
+    }
+  }, [open])
 
   const toggleLanguage = () => {
     const next = isBn ? 'en' : 'bn'
@@ -24,6 +54,7 @@ const Navbar = () => {
   return (
     <header>
       <nav
+        ref={navRef}
         className={`fixed w-full z-50 glass-nav transition-all duration-300 ${
           shrunk
             ? 'shadow-sm bg-linear-to-r from-[#e6fff8]/30 via-[#d0fff0]/18 to-[#c5f7ef]/08 backdrop-blur-sm border-b border-slate-200/6'
@@ -34,7 +65,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className={`flex justify-between items-center transition-all duration-300 ${shrunk ? 'h-16' : 'h-20'}`}>
             {/* Logo */}
-            <a href="#home" className="flex items-center group" aria-label="Go to home">
+            <a href="#home" onClick={() => setOpen(false)} className="flex items-center group" aria-label="Go to home">
               <div className="bg-teal-600/90 p-2 rounded-lg shadow-lg group-hover:bg-teal-700 transition-colors">
                 <Activity className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
@@ -49,7 +80,7 @@ const Navbar = () => {
             </a>
 
             {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center space-x-2" aria-label="Primary navigation">
+            <div className="hidden md:flex items-center space-x-2">
               {[
                 { label: t('navbar.home'), href: '#home' },
                 { label: t('navbar.about'), href: '#about' },
@@ -78,11 +109,12 @@ const Navbar = () => {
               >
                 {isBn ? 'English' : 'বাংলা'} {/* 🔁 Bangla translation toggle */}
               </button>
-            </nav>
+            </div>
 
             {/* Mobile button */}
             <button
-              onClick={() => setOpen(!open)}
+              ref={menuButtonRef}
+              onClick={() => setOpen((isOpen) => !isOpen)}
               className="md:hidden p-2 text-slate-700 hover:text-teal-700 hover:bg-white/40 rounded-lg transition-colors cursor-pointer"
               aria-label="Toggle menu"
               aria-expanded={open}
@@ -127,6 +159,7 @@ const Navbar = () => {
                 </a>
                 <button
                   onClick={() => { toggleLanguage(); setOpen(false) }}
+                  role="menuitem"
                   className="px-4 py-3 bg-white/70 text-slate-800 font-bold rounded-lg border border-white/40 hover:bg-white transition-colors w-28 cursor-pointer"
                 >
                   {isBn ? 'English' : 'বাংলা'} {/* 🔁 Bangla translation toggle */}

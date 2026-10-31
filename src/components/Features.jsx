@@ -20,7 +20,7 @@ const Features = () => {
       <div className="section scroll-mt-20 py-12 md:py-20 relative z-10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 id="features-heading" className="text-4xl font-extrabold text-slate-900 mb-4">
+            <h2 id="features-heading" className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">
               {t('features.title')} {/* 🔁 language switch */}
             </h2>
             <p className="text-lg text-slate-600 leading-relaxed">
@@ -33,7 +33,7 @@ const Features = () => {
             {features.map((f, i) => (
               <div
                 key={i}
-                className="glass-card rounded-3xl p-10 cursor-pointer group border border-white/60 bg-white/30 backdrop-blur-sm shadow-sm transform translate-y-1 hover:-translate-y-2 hover:shadow-xl transition-all duration-500"
+                className="glass-card rounded-3xl p-6 sm:p-10 group border border-white/60 bg-white/30 backdrop-blur-sm shadow-sm transform translate-y-1 hover:-translate-y-2 hover:shadow-xl transition-all duration-500"
               >
                 <div className="w-16 h-16 bg-white/80 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-600 transition-colors duration-500 shadow-sm" aria-hidden="true">
                   {React.cloneElement(f.icon, { className: "h-8 w-8 text-teal-600 group-hover:text-white transition-colors duration-300" })}

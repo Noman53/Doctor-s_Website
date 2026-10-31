@@ -28,7 +28,7 @@ const Services = () => {
             <span className="text-teal-700 font-bold uppercase tracking-wider text-sm bg-white/60 px-4 py-1 rounded-full border border-white/50">
               {t('services.badge')} {/* 🔁 language switch */}
             </span>
-            <h2 id="services-heading" className="text-4xl font-extrabold text-slate-900 mt-4 mb-6">
+            <h2 id="services-heading" className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 mb-6">
               {t('services.title')} {/* 🔁 language switch */}
             </h2>
             <p className="text-lg text-slate-600 leading-relaxed">
@@ -40,7 +40,7 @@ const Services = () => {
             {services.map((s, i) => (
               <div
                 key={i}
-                className="glass-card rounded-3xl p-10 cursor-pointer group border border-white/60 bg-white/30 backdrop-blur-sm shadow-sm transform translate-y-1 hover:-translate-y-2 hover:shadow-xl transition-all duration-500"
+                className="glass-card rounded-3xl p-6 sm:p-10 group border border-white/60 bg-white/30 backdrop-blur-sm shadow-sm transform translate-y-1 hover:-translate-y-2 hover:shadow-xl transition-all duration-500"
               >
                 <div className="w-16 h-16 bg-white/80 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-600 transition-colors duration-500 shadow-sm" aria-hidden="true">
                   {React.cloneElement(s.icon, { className: "h-8 w-8 text-teal-600 group-hover:text-white transition-colors duration-300" })}

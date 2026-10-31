@@ -22,7 +22,7 @@ const Locations = () => {
             </span>
             <h2
               id="locations-heading"
-              className="text-4xl font-extrabold text-slate-900 mb-4 leading-tight"
+              className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 leading-tight"
             >
               {t('locations.title')} {/* 🔁 language switch */}
             </h2>
@@ -56,7 +56,7 @@ const Locations = () => {
                 </div>
                 <div className="flex items-center text-slate-700">
                   <Phone className="h-5 w-5 text-teal-600 mr-3" aria-hidden="true" />
-                  <span className="font-medium">{t('locations.phone')}</span> {/* 🔁 language switch */}
+                  <a className="font-medium hover:text-teal-700" href="tel:+8801711946412">{t('locations.phone')}</a> {/* 🔁 language switch */}
                 </div>
               </div>
 

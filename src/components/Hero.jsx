@@ -2,7 +2,6 @@
 // Refined: semantic landmarks, mobile-first spacing, accessible labels, consistent overlays
 
 import React from 'react'
-import doctorImg from '../assets/Dr-Syed-Md-Muhsin.jpg'
 import { Award, ShieldCheck, Activity, Stethoscope } from 'lucide-react'
 import { useTranslation } from 'react-i18next' // 🔁 language switch
 
@@ -70,23 +69,23 @@ const Hero = () => {
             </div>
 
             {/* Profile Image + Name Tag */}
-            <div className="lg:col-span-6 mt-12 lg:mt-0 relative">
-              <div className="relative rounded-full overflow-hidden shadow-2xl border-8 border-white/30 max-w-xs mx-auto transform hover:scale-105 transition-transform duration-700">
+            <div className="lg:col-span-6 mt-12 lg:mt-0 relative mx-auto w-full max-w-[22rem]">
+              <div className="absolute -inset-3 rounded-[2.4rem] border border-teal-700/15 rotate-3" aria-hidden="true" />
+              <div className="relative z-10 mx-auto w-full max-w-[20rem] aspect-[20/27] overflow-hidden rounded-[2rem] border-[6px] border-white bg-white shadow-[0_24px_70px_rgba(15,76,75,0.2)] transition-transform duration-500 hover:-translate-y-1">
                 <img
-                  className="w-full h-full object-cover"
-                  src={doctorImg}
+                  className="w-full h-full object-contain"
+                  src="/dr-muhsin.jpg"
                   alt={t('identity.name')} /* 🔁 language switch */
-                  loading="lazy"
+                  width="600"
+                  height="750"
+                  fetchPriority="high"
                 />
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-linear-to-t from-teal-900/40 to-transparent z-10" aria-hidden="true"></div>
               </div>
-              {/* Floating Card */}
-              <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 glass-panel p-4 rounded-2xl shadow-lg z-20 flex items-center justify-between border border-white/40 w-[85%] sm:w-[60%] md:w-[50%] lg:w-[40%]">
+              <div className="relative z-20 mt-4 mx-auto w-[calc(100%-1rem)] max-w-[20rem] glass-panel p-4 rounded-2xl shadow-lg flex items-center justify-between gap-3 border border-white/60">
                 <div>
                   <p className="text-sm font-bold text-slate-900">{t('identity.name')}</p> {/* 🔁 language switch */}
                   <p className="text-xs text-teal-700 font-semibold">{t('hero.badge')}</p> {/* 🔁 language switch */}
-                  <p className="text-xs text-teal-700 font-semibold">Chittagong Medical College</p> {/* keep as-is or add translation key if needed */}
+                  <p className="text-xs text-teal-700 font-semibold">{t('about.institute')}</p>
                 </div>
                 <div className="h-12 w-12 bg-teal-600 rounded-full flex items-center justify-center text-white shadow-lg" aria-hidden="true">
                   <Stethoscope className="h-6 w-6" />

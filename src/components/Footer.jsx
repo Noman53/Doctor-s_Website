@@ -42,7 +42,7 @@ const Footer = () => {
 
           {/* Links */}
           <div>
-            <h3 className="text-medical-900 font-extrabold mb-4 uppercase tracking-wider text-[12px]">{t('footer.quickLinks')}</h3> {/* 🔁 language switch */}
+            <h3 className="text-teal-900 font-extrabold mb-4 uppercase tracking-wider text-[12px]">{t('footer.quickLinks')}</h3> {/* 🔁 language switch */}
             <ul className="space-y-2 text-sm">
               {[
                 { label: t('navbar.home'), href: '#home' },
@@ -54,7 +54,7 @@ const Footer = () => {
                 <li key={item.label}>
                   <a
                     href={item.href}
-                    className="text-slate-700 hover:text-medical-800 transition flex items-center group font-medium"
+                    className="text-slate-700 hover:text-teal-800 transition flex items-center group font-medium"
                   >
                     <ChevronRight className="h-3 w-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity" />
                     {item.label}
@@ -66,15 +66,15 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="text-medical-900 font-extrabold mb-4 uppercase tracking-wider text-[12px]">{t('footer.contactInfo')}</h3> {/* 🔁 language switch */}
+            <h3 className="text-teal-900 font-extrabold mb-4 uppercase tracking-wider text-[12px]">{t('footer.contactInfo')}</h3> {/* 🔁 language switch */}
             <ul className="space-y-3 text-sm">
               <li className="flex items-start text-slate-700 font-medium">
-                <MapPin className="h-5 w-5 mr-3 text-medical-700 mt-0.5 shrink-0" />
+                <MapPin className="h-5 w-5 mr-3 text-teal-700 mt-0.5 shrink-0" />
                 <span style={{ whiteSpace: 'pre-line' }}>{t('footer.hospitalAddress')}</span> {/* 🔁 language switch */}
               </li>
               <li className="flex items-center text-slate-700 font-medium">
-                <Phone className="h-5 w-5 mr-3 text-medical-700 shrink-0" />
-                <span>{t('footer.phone')}</span> {/* 🔁 language switch */}
+                <Phone className="h-5 w-5 mr-3 text-teal-700 shrink-0" />
+                <a className="hover:text-teal-800" href="tel:+8801711946412">{t('footer.phone')}</a> {/* 🔁 language switch */}
               </li>
             </ul>
           </div>
